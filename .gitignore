@@ -1,0 +1,23 @@
+# some redundancies just to be safe
+
+# Pulled from netbeans template (fits more with ant)
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Pulled from a gradle template
+/.gradle/
+/.idea/
+/.nb-gradle/
+/build/
+/nbproject/
+/private/
+/Written Assets/
+/*.dll
+/*.dylib
+/*.so
