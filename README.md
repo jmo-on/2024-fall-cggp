@@ -23,3 +23,10 @@
         - more like RTS style FPS <- look fun
             fight only when engaged, timeouts, make dudes go to certain pos, sth like simulation too
     * Timeouts: each team can timeout in the middle of the battle to setup and edit their strats
+
+6. Developement
+   * First deliverable: We have coded a crosshair, a gun shooting mechanism with collision detection, and some targets. The player is also able to jump and move around the map.
+   * We use a scene graph were targets and bullets are nodes and when collided, the bullet disappears and the node also gets pruned.
+   * For input we use addMapping on the WASD keys for 2D movement and spacebar for jumping. We use left click to listen for shooting.
+   * For the crosshair we use a guiNode and use local translation to calculate the location for the middle of the screen.
+   *  
