@@ -14,6 +14,10 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 
+/**
+ * ShootAppState
+ * Shoot control for the game
+ */
 public class ShootAppState extends AbstractAppState implements ActionListener {
 
     private SimpleApplication app;

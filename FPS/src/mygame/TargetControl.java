@@ -8,6 +8,10 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.Spatial;
 import com.jme3.app.SimpleApplication;
 
+/**
+ * TargetControl
+ * Target control for the game
+ */
 public class TargetControl extends AbstractControl {
 
     private SimpleApplication app;

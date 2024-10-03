@@ -14,6 +14,10 @@ import com.jme3.input.controls.*;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Vector3f;
 
+/**
+ * PlayerAppState
+ * Player control for the game
+ */
 public class PlayerAppState extends AbstractAppState implements ActionListener {
 
     private SimpleApplication app;

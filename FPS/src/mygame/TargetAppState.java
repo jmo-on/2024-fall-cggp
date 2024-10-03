@@ -11,6 +11,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Geometry;
 import com.jme3.math.Vector3f;
 
+/**
+ * TargetAppState
+ * Target control for the game
+ */
 public class TargetAppState extends AbstractAppState {
 
     private SimpleApplication app;

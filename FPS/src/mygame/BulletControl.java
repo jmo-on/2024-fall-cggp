@@ -11,6 +11,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 
+/**
+ * BulletControl
+ * Bullet control for the game
+ */
 public class BulletControl extends AbstractControl {
 
     private SimpleApplication app;

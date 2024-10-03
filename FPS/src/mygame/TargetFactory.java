@@ -11,6 +11,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.math.ColorRGBA;
 import com.jme3.app.SimpleApplication;
 
+/**
+ * TargetFactory
+ * Target factory for the game
+ */
 public class TargetFactory {
 
     /**

@@ -8,6 +8,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapText;
 
+/**
+ * Main
+ */
 public class Main extends SimpleApplication {
 
     private BulletAppState bulletAppState;
