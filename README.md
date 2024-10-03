@@ -26,13 +26,22 @@
 
    Specifically, we are looking at Wingman and Deathmatch modes in CS:GO.
    We will further refine our team deathmatch game style with adding unique objectives to win the game.
+
    https://blog.counter-strike.net/index.php/about/
 
    ### Team Fortress 2
 
-   Also, 8 roles in Team Fortress 2 - Scout, Soldier, Pyro, Demoman, Heavy, Engineer, Medic, Sniper, Spy.
+   We are inspired by the 8 roles in Team Fortress 2 - Scout, Soldier, Pyro, Demoman, Heavy, Engineer, Medic, Sniper, Spy.
    We plan to implement a simpler role system with unique weaponry and playstyles for each role.
+
    https://wiki.teamfortress.com/wiki/Team_Fortress_2
+
+   We are also inspired by the maps in Team Fortress 2.
+
+   ![alt text](Ravine.png)
+   ![alt text](Byre.png)
+   
+   These sand texture maps will best use the graphics capabilities of jMonkeyEngine.
 
    ### Future Development
 
@@ -60,7 +69,8 @@
 
 ## Developement
 
-   * First deliverable: We have coded a crosshair, a gun shooting mechanism with collision detection, and some targets. The player is also able to jump and move around the map.
-   * We use a scene graph were targets and bullets are nodes and when collided, the bullet disappears and the node also gets pruned.
-   * For input we use addMapping on the WASD keys for 2D movement and spacebar for jumping. We use left click to listen for shooting.
-   * For the crosshair we use a guiNode and use local translation to calculate the location for the middle of the screen.
+   * First deliverable
+     * We have coded a crosshair, a gun shooting mechanism with collision detection, and some targets. The player is also able to jump and move around the map.
+     * We use a scene graph were targets and bullets are nodes and when collided, the bullet disappears and the node also gets pruned.
+     * For input we use addMapping on the WASD keys for 2D movement and spacebar for jumping. We use left click to listen for shooting.
+     * For the crosshair we use a guiNode and use local translation to calculate the location for the middle of the screen.
