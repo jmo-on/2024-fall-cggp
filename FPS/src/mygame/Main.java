@@ -58,12 +58,7 @@ public class Main extends SimpleApplication {
         // Setup crosshairs
         setupCrosshairs();
 
-        //stateManager.attach(new CameraAppState(this));
-
-        //inputManager.setCursorVisible(false);
-
         // Adjust camera
         cam.setLocation(new com.jme3.math.Vector3f(0, 1.8f, 0));
-        //flyCam.setEnabled(false);
     }
 }
