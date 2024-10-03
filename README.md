@@ -35,6 +35,7 @@
    https://wiki.teamfortress.com/wiki/Team_Fortress_2
 
    ### Future Development
+   
    For future development, we plan to add elements of strategy and teamwork, inspired by games like Deadlock and Spectre Divide.
    
 ## Gameplay
