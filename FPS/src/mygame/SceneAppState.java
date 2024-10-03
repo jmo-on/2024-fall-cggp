@@ -1,3 +1,7 @@
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
+
 package mygame;
 
 import com.jme3.app.Application;
@@ -16,12 +20,17 @@ public class SceneAppState extends AbstractAppState {
 
     private SimpleApplication app;
 
+    /**
+     * Initialize
+     * @param stateManager
+     * @param app Application (SimpleApplication)
+     */
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (SimpleApplication) app;
 
-        /** Create Floor **/
+        // Create floor
         Box floorBox = new Box(20, 0.1f, 20);
         Geometry floorGeom = new Geometry("Floor", floorBox);
         floorGeom.setLocalTranslation(0, -0.1f, 0);
@@ -29,14 +38,16 @@ public class SceneAppState extends AbstractAppState {
         floorMat.setColor("Color", ColorRGBA.DarkGray);
         floorGeom.setMaterial(floorMat);
 
+        // Make floor rigid
         RigidBodyControl floorPhys = new RigidBodyControl(0.0f);
         floorGeom.addControl(floorPhys);
         this.app.getStateManager().getState(BulletAppState.class)
                 .getPhysicsSpace().add(floorPhys);
 
+        // Add floor to scene
         this.app.getRootNode().attachChild(floorGeom);
 
-        /** Add Lighting **/
+        // Add lighting
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -1f, -0.2f).normalizeLocal());
         sun.setColor(ColorRGBA.White);

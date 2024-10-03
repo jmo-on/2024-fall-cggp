@@ -1,3 +1,7 @@
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
+
 package mygame;
 
 import com.jme3.app.Application;
@@ -17,15 +21,25 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
     private Vector3f walkDirection = new Vector3f();
     private boolean left, right, forward, backward;
 
+    /**
+     * Constructor
+     * @param app Application (SimpleApplication)
+     */
     public PlayerAppState(SimpleApplication app) {
         this.app = app;
     }
 
+    /**
+     * Initialize
+     * @param stateManager AppStateManager
+     * @param app Application (SimpleApplication)
+     * @return
+     */
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
 
-        /** Initialize Player Control **/
+        // Initialize player control
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.5f, 1.8f, 1);
         playerControl = new CharacterControl(capsuleShape, 0.05f);
         playerControl.setJumpSpeed(20);
@@ -33,14 +47,18 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
         playerControl.setGravity(30);
         playerControl.setPhysicsLocation(new Vector3f(0, 1.8f, 0));
 
-        /** Add to Physics Space **/
+        // Add to physics space
         this.app.getStateManager().getState(BulletAppState.class)
                 .getPhysicsSpace().add(playerControl);
 
-        /** Set up Controls **/
+        // Set up keys
         setupKeys();
     }
 
+    /**
+     * Setup Keys
+     * @return
+     */
     private void setupKeys() {
         app.getInputManager().addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
         app.getInputManager().addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
@@ -51,6 +69,11 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
         app.getInputManager().addListener(this, "Left", "Right", "Forward", "Backward", "Jump");
     }
 
+    /**
+     * Update
+     * @param tpf Time per frame
+     * @return
+     */
     @Override
     public void update(float tpf) {
         Vector3f camDir = app.getCamera().getDirection().clone().multLocal(0.1f);
@@ -72,6 +95,13 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
         app.getCamera().setLocation(playerControl.getPhysicsLocation());
     }
 
+    /**
+     * On Action
+     * @param binding Action binding
+     * @param isPressed Whether the action is pressed
+     * @param tpf Time per frame
+     * @return
+     */
     @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
         switch (binding) {

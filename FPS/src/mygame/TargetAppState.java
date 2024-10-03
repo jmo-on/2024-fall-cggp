@@ -1,3 +1,7 @@
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
+
 package mygame;
 
 import com.jme3.app.Application;
@@ -12,10 +16,20 @@ public class TargetAppState extends AbstractAppState {
     private SimpleApplication app;
     private Node targetNode;
 
+    /**
+     * Constructor
+     * @param app Application (SimpleApplication)
+     */
     public TargetAppState(SimpleApplication app) {
         this.app = app;
     }
 
+    /**
+     * Initialize
+     * @param stateManager AppStateManager
+     * @param app Application (SimpleApplication)
+     * @return
+     */
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -23,7 +37,7 @@ public class TargetAppState extends AbstractAppState {
         targetNode = new Node("Targets");
         this.app.getRootNode().attachChild(targetNode);
 
-        /** Initialize Targets **/
+        // Initialize targets
         for (int i = 0; i < 5; i++) {
             Geometry target = TargetFactory.makeTarget("Target" + i, new Vector3f(i * 4 - 8, 0.5f, -15), this.app);
             targetNode.attachChild(target);

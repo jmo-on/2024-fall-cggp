@@ -1,3 +1,7 @@
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
+
 package mygame;
 
 import com.jme3.app.Application;
@@ -14,19 +18,36 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
 
     private SimpleApplication app;
 
+    /**
+     * Constructor
+     * @param app Application (SimpleApplication)
+     */
     public ShootAppState(SimpleApplication app) {
         this.app = app;
     }
 
+    /**
+     * Initialize
+     * @param stateManager AppStateManager 
+     * @param app Application (SimpleApplication)
+     * @return
+     */
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
 
-        /** Set up Shoot Control **/
+        // Set up shoot control
         this.app.getInputManager().addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         this.app.getInputManager().addListener(this, "Shoot");
     }
 
+    /**
+     * On Action
+     * @param binding Action binding
+     * @param isPressed Whether the action is pressed
+     * @param tpf Time per frame
+     * @return
+     */
     @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
         if (binding.equals("Shoot") && !isPressed) {
@@ -34,21 +55,25 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
         }
     }
 
+    /**
+     * Shoot
+     * @return
+     */
     private void shoot() {
-        /** Create a Bullet Geometry **/
+        // Create a bullet geometry
         Sphere sphere = new Sphere(8, 8, 0.1f);
         Geometry bullet = new Geometry("Bullet", sphere);
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Yellow);
         bullet.setMaterial(mat);
 
-        /** Position the Bullet **/
+        // Position the bullet
         bullet.setLocalTranslation(app.getCamera().getLocation().add(app.getCamera().getDirection().mult(1)));
 
-        /** Add Bullet Control **/
+        // Add bullet control
         bullet.addControl(new BulletControl(app, app.getCamera().getDirection()));
 
-        /** Attach Bullet to Scene **/
+        // Attach bullet to scene
         app.getRootNode().attachChild(bullet);
     }
 }

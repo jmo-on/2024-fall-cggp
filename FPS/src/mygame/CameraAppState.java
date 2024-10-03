@@ -1,3 +1,7 @@
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
+
 package mygame;
 
 import com.jme3.app.Application;
@@ -19,10 +23,20 @@ public class CameraAppState extends AbstractAppState implements AnalogListener {
     private float yaw = 0;   // Rotation around the Y-axis (left/right)
     private float pitch = 0; // Rotation around the X-axis (up/down)
 
+    /**
+     * Constructor
+     * @param app Application (SimpleApplication)
+     */
     public CameraAppState(SimpleApplication app) {
         this.app = app;
     }
 
+    /**
+     * Initialize
+     * @param stateManager AppStateManager
+     * @param app
+     * @return
+     */
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -36,6 +50,13 @@ public class CameraAppState extends AbstractAppState implements AnalogListener {
         this.app.getInputManager().addListener(this, "MouseMoveLeft", "MouseMoveRight", "MouseMoveUp", "MouseMoveDown");
     }
 
+    /**
+     * On Analog
+     * @param name
+     * @param value
+     * @param tpf
+     * @return
+     */
     @Override
     public void onAnalog(String name, float value, float tpf) {
         if (name.equals("MouseMoveLeft")) {

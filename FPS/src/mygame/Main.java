@@ -1,3 +1,7 @@
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
+
 package mygame;
 
 import com.jme3.app.SimpleApplication;
@@ -12,6 +16,11 @@ public class Main extends SimpleApplication {
         Main app = new Main();
         app.start();
     }
+    
+    /**
+     * Setup Crosshairs
+     * @return
+     */
     private void setupCrosshairs() {
         setDisplayStatView(false);
         guiNode.detachAllChildren();
@@ -24,32 +33,36 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(ch);
     }
 
+    /**
+     * Simple Init App
+     * @return
+     */
     @Override
     public void simpleInitApp() {
-        /** Initialize Physics **/
+        // Initialize physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
 
-        /** Initialize Scene **/
+        // Initialize scene
         stateManager.attach(new SceneAppState());
 
-        /** Initialize Player **/
+        // Initialize player
         stateManager.attach(new PlayerAppState(this));
 
-        /** Initialize Targets **/
+        // Initialize targets
         stateManager.attach(new TargetAppState(this));
 
-        /** Initialize Shooting **/
+        // Initialize shooting
         stateManager.attach(new ShootAppState(this));
         
-        /** Setup Crosshairs **/
+        // Setup crosshairs
         setupCrosshairs();
 
         //stateManager.attach(new CameraAppState(this));
 
         //inputManager.setCursorVisible(false);
 
-        /** Adjust Camera **/
+        // Adjust camera
         cam.setLocation(new com.jme3.math.Vector3f(0, 1.8f, 0));
         //flyCam.setEnabled(false);
     }
