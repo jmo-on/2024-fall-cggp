@@ -35,28 +35,28 @@
    https://wiki.teamfortress.com/wiki/Team_Fortress_2
 
    ### Future Development
-   
+
    For future development, we plan to add elements of strategy and teamwork, inspired by games like Deadlock and Spectre Divide.
    
 ## Gameplay
    
    * Projectile-heavy weaponry
      * Instead of hitscan, projectiles are used for most weapons
-      * Overall low utility options (smoke, flash, grenade, etc.)
-      * Hitscan weapons and utility options will be highly valuable
-    * 3 roles with different weapon builds for each (builds can be changed during timeout)
-      * Tank: choose from additional health and utility options
-        * shield and supportive play / mobility and engagement
-      * DPS: choose from long range and melee
-        * long range for hitscan / melee for flanking
-      * Support: choose from debuff and healing
-        * debuff for aggressive engage / heal for supporting and stability
-    * Timeouts (3 times per game)
-      * each team can timeout in the middle of the battle to setup and edit their strats
-    * Single player mode
-      * Bots to fill the role of the opposing team
-    * Future development: Co-op or 1V1 modes
-      * RTS style FPS (consider Chess, Starcraft, or AOS)
+     * Overall low utility options (smoke, flash, grenade, etc.)
+     * Hitscan weapons and utility options will be highly valuable
+   * 3 roles with different weapon builds for each (builds can be changed during timeout)
+     * Tank: choose from additional health and utility options
+       * shield and supportive play / mobility and engagement
+     * DPS: choose from long range and melee
+       * long range for hitscan / melee for flanking
+     * Support: choose from debuff and healing
+       * debuff for aggressive engage / heal for supporting and stability
+   * Timeouts (3 times per game)
+     * each team can timeout in the middle of the battle to setup and edit their strats
+   * Single player mode
+     * Bots to fill the role of the opposing team
+   * Future development: Co-op or 1V1 modes
+     * RTS style FPS (consider Chess, Starcraft, or AOS)
 
 ## Developement
 
