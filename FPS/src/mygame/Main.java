@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 
 /**
@@ -19,6 +20,11 @@ public class Main extends SimpleApplication {
         Main app = new Main();
         app.start();
     }
+    
+    public BitmapFont getGuiFont() {
+        return guiFont;
+    }
+
     
     /**
      * Setup Crosshairs
@@ -58,6 +64,23 @@ public class Main extends SimpleApplication {
         // Initialize shooting
         stateManager.attach(new ShootAppState(this));
         
+        // Initialize lighting
+        stateManager.attach(new LightingAppState());
+
+        // Load models
+        //stateManager.attach(new ModelLoaderAppState());
+
+        // Load animated models
+       // stateManager.attach(new AnimatedModelAppState());
+
+       //stateManager.attach(new GunAppState()); // Attach GunAppState
+
+        // Initialize the guiFont
+        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+
+        // Initialize GUI
+        stateManager.attach(new GUIAppState());
+    
         // Setup crosshairs
         setupCrosshairs();
 
