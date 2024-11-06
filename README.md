@@ -77,11 +77,16 @@
      * For the crosshair we use a guiNode and use local translation to calculate the location for the middle of the screen.
 
    * Second Deliverable
-     * (the next 2 pullet points are temporary notes and will be deleted once i've written up the more extensive documentation - Kerry)
-     * We have added texture to our targets and have animated meshes to the gun.
-     * Light and physics were present in our previous deliverable. (Including collision detection and projectile.
-     * Since the First Deliverable, we have animated meshes to the gun, so that instead of the bullets appearing out of thin air, we now have a geometry representing the gun barrel (with lighting included)
+     * Since the first deliverable, we have added animated meshes for the gun. Now, instead of bullets appearing out of thin air, there is a visible gun barrel with lighting effects.
         * ![image](https://github.com/user-attachments/assets/6a153144-55a2-4973-8b59-de1771ff1f38)
+        * After the first bullet is fired, the barrel mesh transitions to a full view of two hands holding the gun, complete with recoil animation.
+           *![image](https://github.com/user-attachments/assets/8dfc7467-762f-4e60-886f-4e8ab35af91c)
+     * In addition to the weapon updates, we have added textures to the targets, shown in the images above.
+     * We have incorporated various lighting techniques such as AmbientLight and DirectionalLight to enhance realism. Notably, a shadow effect simulates the player's body or head casting a shadow over the gun, adding to the immersive experience.
+     * Finally, we retained features like jumping, gravity, and collision mechanics to allow the player to navigate the game effectively.
+
+       
+ 
 
    
 
