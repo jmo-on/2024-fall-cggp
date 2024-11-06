@@ -83,6 +83,8 @@
            *![image](https://github.com/user-attachments/assets/8dfc7467-762f-4e60-886f-4e8ab35af91c)
      * In addition to the weapon updates, we have added textures to the targets, shown in the images above.
      * We have incorporated various lighting techniques such as AmbientLight and DirectionalLight to enhance realism. Notably, a shadow effect simulates the player's body or head casting a shadow over the gun, adding to the immersive experience.
+     * Additionally, we have included a health bar to indicate the remaining health of targets. Currently the health bar only reflects a singular target, with a plan to add one on top of each target in the future.
+        * ![image](https://github.com/user-attachments/assets/de8c837c-f1ff-40e3-8638-80fd91991556)
      * Finally, we retained features like jumping, gravity, and collision mechanics to allow the player to navigate the game effectively.
 
        
