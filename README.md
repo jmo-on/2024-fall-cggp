@@ -76,8 +76,6 @@
      * For the crosshair we use a guiNode and use local translation to calculate the location for the middle of the screen.
 
    * Second Deliverable
-     * We have coded a crosshair, a gun shooting mechanism with collision detection, and some targets. The player is also able to jump and move around the map.
-     * We use a scene graph were targets and bullets are nodes and when collided, the bullet disappears and the node also gets pruned.
-     * For input we use addMapping on the WASD keys for 2D movement and spacebar for jumping. We use left click to listen for shooting.
-     * For the crosshair we use a guiNode and use local translation to calculate the location for the middle of the screen.
+     * We have added texture to our targets and have animated meshes to the gun.
+     * Light and physics were present in our previous deliverable. (Including collision detection and projectile.
     
