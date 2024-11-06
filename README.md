@@ -78,4 +78,6 @@
    * Second Deliverable
      * We have added texture to our targets and have animated meshes to the gun.
      * Light and physics were present in our previous deliverable. (Including collision detection and projectile.
+     * ![image](https://github.com/user-attachments/assets/fa55a618-5ee7-488d-afde-f8808354155e)
+
     
