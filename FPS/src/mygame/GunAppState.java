@@ -5,6 +5,7 @@ import com.jme3.anim.util.AnimMigrationUtils;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -38,7 +39,7 @@ public class GunAppState extends BaseAppState {
             System.out.println("Available animations:");
             for (String animName : animComposer.getAnimClipsNames()) {
                 System.out.println(animName);
-        }   
+            }   
 
             // Check if the shooting animation exists
             String shootAnimationName = "Rig|Rig|VSK_Fire";
@@ -46,34 +47,39 @@ public class GunAppState extends BaseAppState {
                 System.out.println("Shoot animation found: " + shootAnimationName);
             } else {
                 System.out.println("Shoot animation '" + shootAnimationName + "' not found!");
+            }
         }
+
+        // Create a node to hold the gun model
+        gunNode = new Node("GunNode");
+        gunNode.attachChild(gunModel);
+
+        // Attach gunNode to the rootNode
+        this.app.getRootNode().attachChild(gunNode);
     }
-
-    // Create a node to hold the gun model
-    gunNode = new Node("GunNode");
-    gunNode.attachChild(gunModel);
-
-    // Attach gunNode to the rootNode
-    this.app.getRootNode().attachChild(gunNode);
-}
 
     private void updateGunPosition() {
         Camera cam = app.getCamera();
-    
+
         // Lower the gun position and adjust the offset
         Vector3f gunOffset = cam.getDirection().mult(0.7f)
-            .add(cam.getLeft().mult(-0.2f))
-            .add(cam.getUp().mult(-0.4f)); // Increase this value to lower the gun further
-    
+            .add(cam.getLeft().mult(-0.1f))
+            .add(cam.getUp().mult(-0.8f)); // Increase this value to lower the gun further
+
         // Set the position of the gun based on camera location and offset
         gunNode.setLocalTranslation(cam.getLocation().add(gunOffset));
-    
+
         // Tilt the gun slightly backward
-        gunNode.setLocalRotation(cam.getRotation().mult(new Quaternion().fromAngles(-0.1f, 0, 0))); // Adjust angle for tilt
-    
+        float pitchRadians = -0.2f; // Increased backward tilt
+        Quaternion backwardTilt = new Quaternion().fromAngles(pitchRadians, 0, 0);
+        
+
+        // Apply the rotation
+        gunNode.setLocalRotation(cam.getRotation().mult(backwardTilt));
+
         // Adjust scale if necessary
         gunNode.setLocalScale(3f); 
-}
+    }
 
     @Override
     public void update(float tpf) {
@@ -81,15 +87,15 @@ public class GunAppState extends BaseAppState {
     }
 
     public void playShootAnimation() {
-    if (animComposer != null) {
-        String shootAnimationName = "Rig|Rig|VSK_Fire";
-        if (animComposer.getAnimClipsNames().contains(shootAnimationName)) {
-            animComposer.setCurrentAction(shootAnimationName);
-        } else {
-            System.out.println("Shoot animation '" + shootAnimationName + "' not found!");
+        if (animComposer != null) {
+            String shootAnimationName = "Rig|Rig|VSK_Fire";
+            if (animComposer.getAnimClipsNames().contains(shootAnimationName)) {
+                animComposer.setCurrentAction(shootAnimationName);
+            } else {
+                System.out.println("Shoot animation '" + shootAnimationName + "' not found!");
+            }
         }
     }
-}
 
     @Override
     protected void cleanup(Application app) {
