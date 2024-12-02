@@ -18,7 +18,6 @@ public class AnimatedModelAppState extends ModelLoaderAppState {
 
         // Get the AnimComposer from the model
         animComposer = animatedModel.getControl(AnimComposer.class);
-
         // Play an animation
         if (animComposer != null) {
             animComposer.setCurrentAction("Walk");

@@ -1,18 +1,15 @@
-// Yongjae Lee
-// Jin Hong Moon
-// Kerry Wang
-
 package mygame;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
-import com.jme3.input.controls.*;
 import com.jme3.input.MouseInput;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Sphere;
+import com.jme3.input.controls.*;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Sphere;
 
 /**
  * ShootAppState
@@ -21,37 +18,28 @@ import com.jme3.math.ColorRGBA;
 public class ShootAppState extends AbstractAppState implements ActionListener {
 
     private SimpleApplication app;
+    private GunAppState gunAppState;
 
-    /**
-     * Constructor
-     * @param app Application (SimpleApplication)
-     */
     public ShootAppState(SimpleApplication app) {
         this.app = app;
     }
 
-    /**
-     * Initialize
-     * @param stateManager AppStateManager 
-     * @param app Application (SimpleApplication)
-     * @return
-     */
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        this.app = (SimpleApplication) app;
 
-        // Set up shoot control
+        // Attach Shoot mapping
         this.app.getInputManager().addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         this.app.getInputManager().addListener(this, "Shoot");
+
+        // Retrieve GunAppState
+        gunAppState = stateManager.getState(GunAppState.class);
+        if (gunAppState == null) {
+            System.out.println("GunAppState not found!");
+        }
     }
 
-    /**
-     * On Action
-     * @param binding Action binding
-     * @param isPressed Whether the action is pressed
-     * @param tpf Time per frame
-     * @return
-     */
     @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
         if (binding.equals("Shoot") && !isPressed) {
@@ -59,25 +47,34 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
         }
     }
 
-    /**
-     * Shoot
-     * @return
-     */
     private void shoot() {
-        // Create a bullet geometry
+        // Create bullet geometry
         Sphere sphere = new Sphere(8, 8, 0.1f);
         Geometry bullet = new Geometry("Bullet", sphere);
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Yellow);
         bullet.setMaterial(mat);
 
-        // Position the bullet
+        // Set bullet position
         bullet.setLocalTranslation(app.getCamera().getLocation().add(app.getCamera().getDirection().mult(1)));
 
-        // Add bullet control
+        // Add BulletControl
         bullet.addControl(new BulletControl(app, app.getCamera().getDirection()));
-
-        // Attach bullet to scene
         app.getRootNode().attachChild(bullet);
+        
+        // Collision check
+        for (Spatial spatial : app.getRootNode().getChildren()) {
+            if (spatial.getControl(TargetControl.class) != null && bullet.getWorldBound().intersects(spatial.getWorldBound())) {
+                TargetControl targetControl = spatial.getControl(TargetControl.class);
+                targetControl.takeDamage(25); // take 25 damage, can be changed later
+                bullet.removeFromParent(); // remove bullet after it hits
+                break;
+            }
+        }
+
+        // Play the gun shooting animation
+        if (gunAppState != null) {
+            gunAppState.playShootAnimation();
+        }
     }
 }

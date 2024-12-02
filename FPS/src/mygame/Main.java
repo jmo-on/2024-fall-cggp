@@ -15,6 +15,9 @@ import com.jme3.font.BitmapText;
 public class Main extends SimpleApplication {
 
     private BulletAppState bulletAppState;
+    private HealthBar healthBar;
+    private float currentHealth = 100;
+    private final float maxHealth = 100;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -73,7 +76,7 @@ public class Main extends SimpleApplication {
         // Load animated models
        // stateManager.attach(new AnimatedModelAppState());
 
-       //stateManager.attach(new GunAppState()); // Attach GunAppState
+       stateManager.attach(new GunAppState()); // Attach GunAppState
 
         // Initialize the guiFont
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -86,5 +89,19 @@ public class Main extends SimpleApplication {
 
         // Adjust camera
         cam.setLocation(new com.jme3.math.Vector3f(0, 1.8f, 0));
+        
+        // Set up health bar with inital heath and max health
+        healthBar = new HealthBar(this, maxHealth);
+    }
+    
+    @Override
+    public void simpleUpdate(float tpf) {
+        currentHealth -= tpf * 2; // decrease health for example
+        if (currentHealth < 0) {
+            currentHealth = 0;
+        }
+        
+        // Update health bar
+        healthBar.updateHealth(currentHealth, maxHealth);
     }
 }

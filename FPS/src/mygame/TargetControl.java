@@ -1,47 +1,58 @@
-// Yongjae Lee
-// Jin Hong Moon
-// Kerry Wang
-
 package mygame;
 
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
-import com.jme3.scene.Spatial;
-import com.jme3.app.SimpleApplication;
+import mygame.core.EventListener;
+import mygame.core.EventBus;
+import mygame.GameEvent;
 
-/**
- * TargetControl
- * Target control for the game
- */
-public class TargetControl extends AbstractControl {
-
-    private SimpleApplication app;
-
-    /**
-     * Constructor
-     * @param app Application (SimpleApplication)
-     */
-    public TargetControl(SimpleApplication app) {
-        this.app = app;
+public class TargetControl extends AbstractControl implements EventListener {
+    private int health;
+    private EventBus eventBus;
+    
+    public TargetControl(int initialHealth) {
+        this.health = initialHealth;
+        this.eventBus = EventBus.getInstance();
+        eventBus.subscribe("DAMAGE", this);
     }
-
-    /**
-     * Update
-     * @param tpf Time per frame
-     * @return
-     */
+    
+    @Override
+    public void onEvent(GameEvent event) {
+        if (event.getType().equals("DAMAGE")) {
+            int damage = (Integer) event.getData("amount");
+            takeDamage(damage);
+        }
+    }
+    
+    public void takeDamage(int damage) {
+        health -= damage;
+        
+        GameEvent damageEvent = new GameEvent("TARGET_DAMAGED");
+        damageEvent.addData("target", spatial);
+        damageEvent.addData("remainingHealth", health);
+        eventBus.publish(damageEvent);
+        
+        if (health <= 0) {
+            handleDeath();
+        }
+    }
+    
+    private void handleDeath() {
+        GameEvent deathEvent = new GameEvent("TARGET_DESTROYED");
+        deathEvent.addData("target", spatial);
+        eventBus.publish(deathEvent);
+        
+        spatial.removeFromParent();
+    }
+    
     @Override
     protected void controlUpdate(float tpf) {
-        // TODO: Implement target-specific logic here (if any)
+        // Update logic here
     }
-
-    /**
-     * Render
-     * @param rm RenderManager
-     * @param vp ViewPort
-     * @return
-     */
+    
     @Override
-    protected void controlRender(com.jme3.renderer.RenderManager rm, com.jme3.renderer.ViewPort vp) {
-        // TODO: Rendering code (if needed)
+    protected void controlRender(RenderManager rm, ViewPort vp) {
+        // Render logic here
     }
 }

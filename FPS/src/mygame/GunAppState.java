@@ -1,9 +1,12 @@
 package mygame;
 
+import com.jme3.anim.AnimComposer;
+import com.jme3.anim.util.AnimMigrationUtils;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
-import com.jme3.material.Material;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -14,17 +17,38 @@ public class GunAppState extends BaseAppState {
     private SimpleApplication app;
     private Spatial gunModel;
     private Node gunNode;
+    private AnimComposer animComposer;
+    // private Action shootAction; // Not needed if using setCurrentAction with the action name
 
     @Override
     protected void initialize(Application app) {
         this.app = (SimpleApplication) app;
 
         // Load the gun model
-        gunModel = this.app.getAssetManager().loadModel("Models/scene.j3o");
+        gunModel = this.app.getAssetManager().loadModel("Models/an.j3o");
 
-        // If necessary, apply a material
-        // Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
-        // gunModel.setMaterial(mat);
+        // Migrate old AnimControl to AnimComposer if necessary
+        AnimMigrationUtils.migrate(gunModel);
+
+        // Retrieve the AnimComposer
+        animComposer = gunModel.getControl(AnimComposer.class);
+        if (animComposer == null) {
+            System.out.println("AnimComposer not found on gun model!");
+        } else {
+            // Print available animations
+            System.out.println("Available animations:");
+            for (String animName : animComposer.getAnimClipsNames()) {
+                System.out.println(animName);
+            }   
+
+            // Check if the shooting animation exists
+            String shootAnimationName = "Rig|Rig|VSK_Fire";
+            if (animComposer.getAnimClipsNames().contains(shootAnimationName)) {
+                System.out.println("Shoot animation found: " + shootAnimationName);
+            } else {
+                System.out.println("Shoot animation '" + shootAnimationName + "' not found!");
+            }
+        }
 
         // Create a node to hold the gun model
         gunNode = new Node("GunNode");
@@ -36,18 +60,41 @@ public class GunAppState extends BaseAppState {
 
     private void updateGunPosition() {
         Camera cam = app.getCamera();
-        // Adjust these values to position the gun correctly
-        Vector3f gunOffset = cam.getDirection().mult(0.5f)
-                         .add(cam.getLeft().mult(-0.2f))
-                         .add(cam.getUp().mult(-0.2f));
+
+        // Lower the gun position and adjust the offset
+        Vector3f gunOffset = cam.getDirection().mult(0.7f)
+            .add(cam.getLeft().mult(-0.1f))
+            .add(cam.getUp().mult(-0.8f)); // Increase this value to lower the gun further
+
+        // Set the position of the gun based on camera location and offset
         gunNode.setLocalTranslation(cam.getLocation().add(gunOffset));
-        gunNode.setLocalRotation(cam.getRotation());
-        gunNode.setLocalScale(0.5f); // Adjust scale as needed
+
+        // Tilt the gun slightly backward
+        float pitchRadians = -0.2f; // Increased backward tilt
+        Quaternion backwardTilt = new Quaternion().fromAngles(pitchRadians, 0, 0);
+        
+
+        // Apply the rotation
+        gunNode.setLocalRotation(cam.getRotation().mult(backwardTilt));
+
+        // Adjust scale if necessary
+        gunNode.setLocalScale(3f); 
     }
 
     @Override
     public void update(float tpf) {
         updateGunPosition();
+    }
+
+    public void playShootAnimation() {
+        if (animComposer != null) {
+            String shootAnimationName = "Rig|Rig|VSK_Fire";
+            if (animComposer.getAnimClipsNames().contains(shootAnimationName)) {
+                animComposer.setCurrentAction(shootAnimationName);
+            } else {
+                System.out.println("Shoot animation '" + shootAnimationName + "' not found!");
+            }
+        }
     }
 
     @Override
