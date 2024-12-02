@@ -69,8 +69,27 @@
 
 ## Developement
 
-   * First deliverable
+   * First Deliverable
      * We have coded a crosshair, a gun shooting mechanism with collision detection, and some targets. The player is also able to jump and move around the map.
+        * ![image](https://github.com/user-attachments/assets/fa55a618-5ee7-488d-afde-f8808354155e)
      * We use a scene graph were targets and bullets are nodes and when collided, the bullet disappears and the node also gets pruned.
      * For input we use addMapping on the WASD keys for 2D movement and spacebar for jumping. We use left click to listen for shooting.
      * For the crosshair we use a guiNode and use local translation to calculate the location for the middle of the screen.
+
+   * Second Deliverable
+     * Since the first deliverable, we have added animated meshes for the gun. Now, instead of bullets appearing out of thin air, there is a visible gun barrel with lighting effects.
+        * ![image](https://github.com/user-attachments/assets/6a153144-55a2-4973-8b59-de1771ff1f38)
+        * After the first bullet is fired, the barrel mesh transitions to a full view of two hands holding the gun, complete with recoil animation.
+           *![image](https://github.com/user-attachments/assets/8dfc7467-762f-4e60-886f-4e8ab35af91c)
+     * In addition to the weapon updates, we have added textures to the targets, shown in the images above.
+     * We have incorporated various lighting techniques such as AmbientLight and DirectionalLight to enhance realism. Notably, a shadow effect simulates the player's body or head casting a shadow over the gun, adding to the immersive experience.
+     * Additionally, we have included a health bar to indicate the remaining health of targets. Currently the health bar only reflects a singular target, with a plan to add one on top of each target in the future.
+        * ![image](https://github.com/user-attachments/assets/de8c837c-f1ff-40e3-8638-80fd91991556)
+     * Finally, we retained features like jumping, gravity, and collision mechanics to allow the player to navigate the game effectively.
+
+       
+ 
+
+   
+
+    
