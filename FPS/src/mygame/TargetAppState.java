@@ -29,7 +29,7 @@ public class TargetAppState extends AbstractAppState {
     private final float SPAWN_AREA = 20f; // Size of spawn area
     private Random random = new Random();
     private GameMode currentMode = GameMode.MEDIUM; // Default game mode
-    private final float EASY_HEIGHT = 3f;  // Height for targets in easy mode
+    private final float EASY_HEIGHT = 1.7f;  // Changed from 3f to 1.7f
     private final float MEDIUM_SPEED = 2f;  // Movement speed for medium mode
     private final float HARD_SPEED = 4f;   // Movement speed for hard mode
     private BulletAppState bulletAppState;
@@ -94,7 +94,7 @@ public class TargetAppState extends AbstractAppState {
     }
 
     private void spawnNewTarget() {
-        float x = 0, z = 0, y = 3f;
+        float x = 0, z = 0, y = 1.7f;
         int targetCount = targetNode.getChildren().size();  // Get current number of targets
         
         switch (currentMode) {

@@ -5,6 +5,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioData.DataType;
+import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.*;
 import com.jme3.material.Material;
@@ -12,6 +13,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
+import com.jme3.font.BitmapText;
 
 public class ShootAppState extends AbstractAppState implements ActionListener {
     private SimpleApplication app;
@@ -22,6 +24,7 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
     private boolean isReloading = false;
     private PauseMenuState pauseMenuState;
     private boolean enabled = true;
+    private BitmapText ammoText;
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -38,23 +41,18 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
         
         // Setup input
         this.app.getInputManager().addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        this.app.getInputManager().addMapping("Reload", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        this.app.getInputManager().addMapping("Reload", new KeyTrigger(KeyInput.KEY_R));
         this.app.getInputManager().addListener(this, "Shoot", "Reload");
         
-        // Get GunAppState
+        // Get other states
         gunAppState = stateManager.getState(GunAppState.class);
-        if (gunAppState == null) {
-            System.out.println("GunAppState not found!");
-        }
-
-        // Get PauseMenuState
         pauseMenuState = stateManager.getState(PauseMenuState.class);
-        if (pauseMenuState == null) {
-            System.out.println("PauseMenuState not found!");
-        }
 
         // Setup sounds
         setupSounds();
+        
+        // Setup ammo display
+        setupAmmoDisplay();
     }
 
     private void setupSounds() {
@@ -69,24 +67,43 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
         }
     }
 
+    private void setupAmmoDisplay() {
+        ammoText = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
+        ammoText.setSize(30);
+        ammoText.setColor(ColorRGBA.White);
+        updateAmmoDisplay();
+        
+        // Position ammo text above and slightly right of the crosshair
+        ammoText.setLocalTranslation(app.getCamera().getWidth() - ammoText.getLineWidth() - 10, 30, 0);
+        app.getGuiNode().attachChild(ammoText);
+    }
+
+    private void updateAmmoDisplay() {
+        if (ammoText != null) {
+            ammoText.setText("Ammo: " + currentAmmo + "/" + MAX_AMMO);
+        }
+    }
+
     @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
         if (!enabled) {
             return;
         }
         
-        // Check if pause menu is active
         if (pauseMenuState != null && pauseMenuState.isEnabled()) {
-            return; // Don't process shooting while menu is active
+            return;
         }
 
         if (binding.equals("Shoot") && !isPressed && !isReloading) {
             if (currentAmmo > 0) {
                 shoot();
                 currentAmmo--;
+                updateAmmoDisplay();
             }
-        } else if (binding.equals("Reload") && !isPressed && !isReloading && currentAmmo < MAX_AMMO) {
-            reload();
+        } else if (binding.equals("Reload") && !isPressed) {
+            if (!isReloading && currentAmmo < MAX_AMMO) {
+                reload();
+            }
         }
     }
 
@@ -128,14 +145,24 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
     }
 
     private void reload() {
-        isReloading = true;
+        if (isReloading || currentAmmo >= MAX_AMMO) {
+            return;
+        }
         
-        // Add reload delay
+        isReloading = true;
+        System.out.println("Reloading..."); // Debug print
+        
         new Thread(() -> {
             try {
                 Thread.sleep(2000); // 2 second reload time
-                currentAmmo = MAX_AMMO;
-                isReloading = false;
+                // Schedule the GUI update on the main JME thread
+                app.enqueue(() -> {
+                    currentAmmo = MAX_AMMO;
+                    isReloading = false;
+                    updateAmmoDisplay();
+                    System.out.println("Reload complete"); // Debug print
+                    return null;
+                });
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -147,6 +174,9 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
         super.cleanup();
         if (shootSound != null) {
             app.getRootNode().detachChild(shootSound);
+        }
+        if (ammoText != null) {
+            app.getGuiNode().detachChild(ammoText);
         }
     }
 }
