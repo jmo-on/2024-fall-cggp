@@ -1,7 +1,11 @@
 package mygame;
 
+import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
+import com.jme3.anim.tween.action.Action;
+import com.jme3.anim.tween.action.ClipAction;
 import com.jme3.anim.util.AnimMigrationUtils;
+import com.jme3.animation.LoopMode;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
@@ -13,6 +17,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 public class GunAppState extends BaseAppState {
+    private boolean isShooting = false;
+    private double shootStartTime = 0;
+    private double shootAnimationLength = 0;
+    private String shootAnimationName = "Rig|Rig|VSK_Fire"; // Make sure this matches your animation name
 
     private SimpleApplication app;
     private Spatial gunModel;
@@ -63,8 +71,8 @@ public class GunAppState extends BaseAppState {
 
         // Lower the gun position and adjust the offset
         Vector3f gunOffset = cam.getDirection().mult(0.7f)
-            .add(cam.getLeft().mult(-0.1f))
-            .add(cam.getUp().mult(-0.8f)); // Increase this value to lower the gun further
+            .add(cam.getLeft().mult(0.1f))
+            .add(cam.getUp().mult(-1.15f)); // Increase this value to lower the gun further
 
         // Set the position of the gun based on camera location and offset
         gunNode.setLocalTranslation(cam.getLocation().add(gunOffset));
@@ -84,18 +92,36 @@ public class GunAppState extends BaseAppState {
     @Override
     public void update(float tpf) {
         updateGunPosition();
+            if (isShooting) {
+        shootStartTime += tpf;
+        if (shootStartTime >= shootAnimationLength) {
+            // Shooting animation finished
+            isShooting = false;
+            // Optionally, reset to an idle animation if you have one
+            // animComposer.setCurrentAction("IdleAnimation");
+            // Or set the current action to null to stop animations
+            animComposer.removeCurrentAction(AnimComposer.DEFAULT_LAYER);
+        }
+    }
+
     }
 
     public void playShootAnimation() {
         if (animComposer != null) {
-            String shootAnimationName = "Rig|Rig|VSK_Fire";
             if (animComposer.getAnimClipsNames().contains(shootAnimationName)) {
+                // Set the current action to the shooting animation
                 animComposer.setCurrentAction(shootAnimationName);
+
+                // Initialize shooting state and timing
+                isShooting = true;
+                shootStartTime = 0;
+                // Get the length of the shooting animation
+                shootAnimationLength = animComposer.getAnimClip(shootAnimationName).getLength();
             } else {
                 System.out.println("Shoot animation '" + shootAnimationName + "' not found!");
-            }
         }
     }
+}
 
     @Override
     protected void cleanup(Application app) {
