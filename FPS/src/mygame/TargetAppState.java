@@ -65,8 +65,8 @@ public class TargetAppState extends AbstractAppState {
         EventBus.getInstance().subscribe("TARGET_DESTROYED", new EventListener() {
             @Override
             public void onEvent(GameEvent event) {
-                // Check current target count
-                if (targetNode.getChildren().size() < TARGET_COUNT) {
+                // Only spawn new targets if the state is enabled
+                if (isEnabled() && targetNode.getChildren().size() < TARGET_COUNT) {
                     spawnNewTarget();
                 }
             }
@@ -83,7 +83,7 @@ public class TargetAppState extends AbstractAppState {
         resetTargets();
     }
 
-    private void resetTargets() {
+    public void resetTargets() {
         // Remove all existing targets
         targetNode.detachAllChildren();
         

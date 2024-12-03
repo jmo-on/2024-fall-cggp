@@ -21,6 +21,11 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
     private static final int MAX_AMMO = 30;
     private boolean isReloading = false;
     private PauseMenuState pauseMenuState;
+    private boolean enabled = true;
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public ShootAppState(SimpleApplication app) {
         this.app = app;
@@ -66,6 +71,10 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
 
     @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
+        if (!enabled) {
+            return;
+        }
+        
         // Check if pause menu is active
         if (pauseMenuState != null && pauseMenuState.isEnabled()) {
             return; // Don't process shooting while menu is active
@@ -75,9 +84,6 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
             if (currentAmmo > 0) {
                 shoot();
                 currentAmmo--;
-            } else {
-                // Optional: Play empty gun sound
-                // emptyGunSound.playInstance();
             }
         } else if (binding.equals("Reload") && !isPressed && !isReloading && currentAmmo < MAX_AMMO) {
             reload();
