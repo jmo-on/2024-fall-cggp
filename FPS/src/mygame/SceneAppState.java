@@ -36,7 +36,7 @@ public class SceneAppState extends AbstractAppState {
             bulletAppState = new BulletAppState();
             stateManager.attach(bulletAppState);
         }
-        bulletAppState.setDebugEnabled(true);
+        bulletAppState.setDebugEnabled(false);
         
         createTerrain();
         addLighting();

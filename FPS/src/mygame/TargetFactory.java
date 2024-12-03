@@ -63,7 +63,7 @@ public class TargetFactory {
         
         // add health bar
         HealthBar healthBar = new HealthBar(app.getAssetManager(), 100);
-        healthBar.setLocalTranslation(0, 0.6f, 0);
+        healthBar.setLocalTranslation(0, 1.0f, 0);
         targetNode.attachChild(healthBar);
         
         // Add target control

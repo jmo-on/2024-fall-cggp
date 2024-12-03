@@ -23,12 +23,15 @@ public class HealthBar extends Node {
         this.currentHealth = maxHealth;
 
         // Create the background (gray bar)
-        Quad bgQuad = new Quad(1, 0.1f); // Adjust dimensions as needed
+        Quad bgQuad = new Quad(1, 0.1f);
         healthBarBackground = new Geometry("HealthBarBG", bgQuad);
         Material bgMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         bgMaterial.setColor("Color", ColorRGBA.Gray);
         healthBarBackground.setMaterial(bgMaterial);
-        attachChild(healthBarBackground); // Attach to this Node
+        
+        // Center the quad
+        healthBarBackground.setLocalTranslation(-0.5f, -0.05f, 0);
+        attachChild(healthBarBackground);
 
         // Create the foreground (green bar)
         Quad fgQuad = new Quad(1, 0.1f);
@@ -36,7 +39,10 @@ public class HealthBar extends Node {
         Material fgMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         fgMaterial.setColor("Color", ColorRGBA.Green);
         healthBarForeground.setMaterial(fgMaterial);
-        attachChild(healthBarForeground); // Attach to this Node
+        
+        // Center the quad
+        healthBarForeground.setLocalTranslation(-0.5f, -0.05f, 0);
+        attachChild(healthBarForeground);
     }
 
     // Decrease health and update the bar

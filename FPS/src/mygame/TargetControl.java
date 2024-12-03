@@ -12,6 +12,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.app.SimpleApplication;
 import com.jme3.scene.Spatial;
 import java.util.Random;
+import com.jme3.math.Quaternion;
 
 public class TargetControl extends AbstractControl implements EventListener {
     private EventBus eventBus;
@@ -128,6 +129,28 @@ public class TargetControl extends AbstractControl implements EventListener {
             RigidBodyControl physicsControl = spatial.getControl(RigidBodyControl.class);
             if (physicsControl != null) {
                 physicsControl.setPhysicsLocation(newPos);
+            }
+            
+            // Make health bar face the camera (only in X-Z plane)
+            if (healthBar != null) {
+                // Get camera position and target position
+                Vector3f cameraPos = app.getCamera().getLocation();
+                Vector3f targetPos = spatial.getLocalTranslation();
+                
+                // Calculate direction from target to camera
+                Vector3f direction = cameraPos.subtract(targetPos);
+                direction.y = 0; // Zero out the Y component to keep health bar upright
+                direction.normalizeLocal();
+                
+                // Calculate the angle between the direction and the Z axis
+                float angle = (float) Math.atan2(direction.x, direction.z);
+                
+                // Create rotation quaternion (only around Y axis)
+                Quaternion rotation = new Quaternion();
+                rotation.fromAngles(0, angle, 0);
+                
+                // Apply rotation to health bar
+                healthBar.setLocalRotation(rotation);
             }
         }
     }
