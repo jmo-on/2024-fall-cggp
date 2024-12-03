@@ -8,6 +8,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
 
 /**
  * Main
@@ -92,13 +93,17 @@ public class Main extends SimpleApplication {
         
         // Set up health bar with inital heath and max health
         healthBar = new HealthBar(assetManager, maxHealth);
-        
-        // Initialize ShadowManager
-        ShadowManager shadowManager = new ShadowManager(this);
+
         
         CollisionListener collisionListener = new CollisionListener();
         bulletAppState.getPhysicsSpace().addCollisionListener(collisionListener);
         
+        SkyandFog fogManager = new SkyandFog(this);
+        fogManager.setupFog(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f), 5, 0.1f);
+        fogManager.setupSky();
+        
+        // Initialize ShadowManager
+        ShadowManager shadowManager = new ShadowManager(this);
     }
     
     @Override
