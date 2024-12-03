@@ -106,12 +106,12 @@ public class Main extends SimpleApplication {
         
         // Set up sky and fog (desert style) 
         SkyandFog fogManager = new SkyandFog(this);
-        fogManager.setupSky();
+        //fogManager.setupSky();
         fogManager.setupFog(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f), 5, 0.1f);
         
         // Fog (forest style)
         //SkyandFog fogManager = new SkyandFog(this);
-        //fogManager.setupFog(new ColorRGBA(0.6f, 0.8f, 0.7f, 1.0f), 60, 0.4f);
+        fogManager.setupFog(new ColorRGBA(0.6f, 0.8f, 0.7f, 1.0f), 60, 0.4f);
         
         // Initialize ShadowManager
         ShadowManager shadowManager = new ShadowManager(this);
