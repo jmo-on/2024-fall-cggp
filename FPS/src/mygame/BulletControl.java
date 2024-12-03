@@ -28,7 +28,7 @@ public class BulletControl extends AbstractControl {
      */
     public BulletControl(SimpleApplication app, Vector3f direction) {
         this.app = app;
-        this.initialVelocity = direction.mult(50);
+        this.initialVelocity = direction.mult(100);
         bulletPhys = new RigidBodyControl(1f);
     }
 
