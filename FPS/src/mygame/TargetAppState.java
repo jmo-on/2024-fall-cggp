@@ -7,6 +7,8 @@ package mygame;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import com.jme3.scene.Geometry;
 import com.jme3.math.Vector3f;
@@ -43,8 +45,13 @@ public class TargetAppState extends AbstractAppState {
 
         // Initialize targets
         for (int i = 0; i < 5; i++) {
-            Geometry target = TargetFactory.makeTarget("Target" + i, new Vector3f(i * 4 - 8, 0.5f, -15), this.app);
+            Node target = TargetFactory.makeTarget("Target" + i, new Vector3f(i * 3 - 6, 0, -10), this.app);
             targetNode.attachChild(target);
+            
+            RigidBodyControl physicsControl = target.getControl(RigidBodyControl.class);
+            if (physicsControl != null) {
+                this.app.getStateManager().getState(BulletAppState.class).getPhysicsSpace().add(physicsControl);
+            }
         }
     }
 }

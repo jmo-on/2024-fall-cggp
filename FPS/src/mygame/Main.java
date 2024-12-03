@@ -91,21 +91,17 @@ public class Main extends SimpleApplication {
         cam.setLocation(new com.jme3.math.Vector3f(0, 1.8f, 0));
         
         // Set up health bar with inital heath and max health
-        healthBar = new HealthBar(this, maxHealth);
+        healthBar = new HealthBar(assetManager, maxHealth);
         
         // Initialize ShadowManager
         ShadowManager shadowManager = new ShadowManager(this);
+        
+        CollisionListener collisionListener = new CollisionListener();
+        bulletAppState.getPhysicsSpace().addCollisionListener(collisionListener);
         
     }
     
     @Override
     public void simpleUpdate(float tpf) {
-        currentHealth -= tpf * 2; // decrease health for example
-        if (currentHealth < 0) {
-            currentHealth = 0;
-        }
-        
-        // Update health bar
-        healthBar.updateHealth(currentHealth, maxHealth);
     }
 }

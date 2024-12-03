@@ -8,7 +8,9 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.app.SimpleApplication;
 import com.jme3.texture.Texture;
 import com.jme3.asset.TextureKey;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Node;
 
 /**
  * TargetFactory
@@ -23,10 +25,10 @@ public class TargetFactory {
      * @param app Application (SimpleApplication)
      * @return Target Geometry
      */
-    public static Geometry makeTarget(String name, Vector3f loc, SimpleApplication app) {
+    public static Node makeTarget(String name, Vector3f loc, SimpleApplication app) {
         Box box = new Box(0.5f, 0.5f, 0.5f);
-        Geometry target = new Geometry(name, box);
-        target.setLocalTranslation(loc);
+        Geometry targetGeometry = new Geometry(name, box);
+        targetGeometry.setLocalTranslation(loc);
 
         // Create material with texture
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
@@ -47,17 +49,32 @@ public class TargetFactory {
         mat.setColor("Specular", ColorRGBA.White);
         mat.setFloat("Shininess", 64f); // Controls the specular highlight
 
-        target.setMaterial(mat);
+        targetGeometry.setMaterial(mat);
         
         // set shadow mode
-        target.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
-
+        targetGeometry.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+        
+        // create target node to hold geometry and health bar
+        Node targetNode = new Node(name);
+        targetNode.setLocalTranslation(loc);
+        targetGeometry.setLocalTranslation(0, 0.5f, 0);
+        targetNode.attachChild(targetGeometry);
+        
+        // add health bar
+        HealthBar healthBar = new HealthBar(app.getAssetManager(), 100);
+        healthBar.setLocalTranslation(0, 1.1f, 0);
+        targetNode.attachChild(healthBar);
+        
         // Add target control
-        int initialHealth = 100; //can be changed later
-        TargetControl targetControl = new TargetControl(initialHealth);
-        target.addControl(targetControl);
-        // target.addControl(new TargetControl(app));
+        TargetControl targetControl = new TargetControl(100);
+        targetControl.setHealthBar(healthBar);
+        targetNode.addControl(targetControl);
+        
+        RigidBodyControl physicsControl = new RigidBodyControl(0.0f); // Static object
+        targetNode.addControl(physicsControl);
+        System.out.println("TargetControl added to target: " + name);
 
-        return target;
+
+        return targetNode;
     }
 }

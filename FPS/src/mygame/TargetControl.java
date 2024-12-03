@@ -8,11 +8,15 @@ import mygame.core.EventBus;
 import mygame.GameEvent;
 
 public class TargetControl extends AbstractControl implements EventListener {
-    private int health;
     private EventBus eventBus;
+    private HealthBar healthBar;
+    private final float maxHealth;
+    private float health;
     
     public TargetControl(int initialHealth) {
         this.health = initialHealth;
+        this.maxHealth = initialHealth;
+        //this.healthBar = healthBar;
         this.eventBus = EventBus.getInstance();
         eventBus.subscribe("DAMAGE", this);
     }
@@ -25,17 +29,31 @@ public class TargetControl extends AbstractControl implements EventListener {
         }
     }
     
+    public void setHealthBar(HealthBar healthBar) {
+        this.healthBar = healthBar;
+    }
+    
     public void takeDamage(int damage) {
         health -= damage;
+        System.out.println("Damage applied: " + damage + ", Remaining health: " + health);
+
+        if(healthBar != null) {
+            healthBar.decreaseHealth(damage); 
+            System.out.println("Health bar updated. Current health: " + healthBar.getCurrentHealth());
+        }
         
-        GameEvent damageEvent = new GameEvent("TARGET_DAMAGED");
+        if (health <= 0) {
+            spatial.removeFromParent();
+            System.out.println("Target destroyed.");
+            //handleDeath();
+        }
+        
+        /*GameEvent damageEvent = new GameEvent("TARGET_DAMAGED");
         damageEvent.addData("target", spatial);
         damageEvent.addData("remainingHealth", health);
         eventBus.publish(damageEvent);
+        */
         
-        if (health <= 0) {
-            handleDeath();
-        }
     }
     
     private void handleDeath() {
@@ -45,6 +63,8 @@ public class TargetControl extends AbstractControl implements EventListener {
         
         spatial.removeFromParent();
     }
+    
+    
     
     @Override
     protected void controlUpdate(float tpf) {

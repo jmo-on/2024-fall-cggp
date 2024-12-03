@@ -18,7 +18,9 @@ public class HealthSystem extends BaseGameState implements EventListener {
     protected void initializeState() {
         currentHealth = 100;
         maxHealth = 100;
-        healthBar = new HealthBar(app, maxHealth);
+        healthBar = new HealthBar(app.getAssetManager(), maxHealth);
+        healthBar.setLocalTranslation(10, 10, 0);
+        app.getGuiNode().attachChild(healthBar);
         
         eventBus.subscribe("DAMAGE_TAKEN", this);
         eventBus.subscribe("HEALTH_PICKUP", this);
@@ -32,7 +34,6 @@ public class HealthSystem extends BaseGameState implements EventListener {
                 regenerateHealth(tpf);
             }
         }
-        healthBar.updateHealth(currentHealth, maxHealth);
     }
     
     private void regenerateHealth(float tpf) {
