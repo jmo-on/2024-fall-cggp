@@ -159,4 +159,8 @@ public class TargetControl extends AbstractControl implements EventListener {
     protected void controlRender(RenderManager rm, ViewPort vp) {
         // Render logic here
     }
+    
+    public void setMoveSpeed(float speed) {
+        this.moveSpeed = speed;
+    }
 }

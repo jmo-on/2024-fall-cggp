@@ -28,6 +28,11 @@ public class TargetAppState extends AbstractAppState {
     private final int TARGET_COUNT = 5; // Number of targets to maintain
     private final float SPAWN_AREA = 20f; // Size of spawn area
     private Random random = new Random();
+    private GameMode currentMode = GameMode.MEDIUM; // Default game mode
+    private final float EASY_HEIGHT = 3f;  // Height for targets in easy mode
+    private final float MEDIUM_SPEED = 2f;  // Movement speed for medium mode
+    private final float HARD_SPEED = 4f;   // Movement speed for hard mode
+    private BulletAppState bulletAppState;
 
     /**
      * Constructor
@@ -46,6 +51,12 @@ public class TargetAppState extends AbstractAppState {
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+
+        bulletAppState = stateManager.getState(BulletAppState.class);
+        if (bulletAppState == null) {
+            bulletAppState = new BulletAppState();
+            stateManager.attach(bulletAppState);
+        }
         
         targetNode = new Node("Targets");
         this.app.getRootNode().attachChild(targetNode);
@@ -67,27 +78,75 @@ public class TargetAppState extends AbstractAppState {
         }
     }
 
+    public void setGameMode(GameMode mode) {
+        this.currentMode = mode;
+        resetTargets();
+    }
+
+    private void resetTargets() {
+        // Remove all existing targets
+        targetNode.detachAllChildren();
+        
+        // Spawn new targets based on game mode
+        for (int i = 0; i < TARGET_COUNT; i++) {
+            spawnNewTarget();
+        }
+    }
+
     private void spawnNewTarget() {
-        // Generate random position
-        float x = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
-        float z = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
-        float y = 3f; // Fixed height for all targets
+        float x = 0, z = 0, y = 3f;
+        int targetCount = targetNode.getChildren().size();  // Get current number of targets
         
-        Vector3f randomPosition = new Vector3f(x, y, z);
+        switch (currentMode) {
+            case EASY:
+                // Line up targets horizontally
+                x = (targetCount - TARGET_COUNT/2) * 4f; // Space them 4 units apart
+                z = 0;
+                y = EASY_HEIGHT;
+                break;
+                
+            case MEDIUM:
+                // Random positions as before
+                x = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
+                z = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
+                y = 3f;
+                break;
+                
+            case HARD:
+                // Same as medium but will move faster
+                x = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
+                z = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
+                y = 3f;
+                break;
+        }
         
-        // Create new target
+        Vector3f position = new Vector3f(x, y, z);
         Node target = TargetFactory.makeTarget("Target" + System.currentTimeMillis(), 
-                                             randomPosition, 
+                                             position, 
                                              this.app);
+        
+        // Set movement speed based on mode
+        TargetControl targetControl = target.getControl(TargetControl.class);
+        if (targetControl != null) {
+            switch (currentMode) {
+                case EASY:
+                    targetControl.setMoveSpeed(0);  // No movement
+                    break;
+                case MEDIUM:
+                    targetControl.setMoveSpeed(MEDIUM_SPEED);
+                    break;
+                case HARD:
+                    targetControl.setMoveSpeed(HARD_SPEED);
+                    break;
+            }
+        }
+        
         targetNode.attachChild(target);
         
         // Add physics
         RigidBodyControl physicsControl = target.getControl(RigidBodyControl.class);
         if (physicsControl != null) {
-            BulletAppState bulletAppState = this.app.getStateManager().getState(BulletAppState.class);
-            if (bulletAppState != null) {
-                bulletAppState.getPhysicsSpace().add(physicsControl);
-            }
+            bulletAppState.getPhysicsSpace().add(physicsControl);
         }
     }
 }

@@ -8,6 +8,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 
 /**
@@ -112,6 +115,23 @@ public class Main extends SimpleApplication {
         
         // Initialize ShadowManager
         ShadowManager shadowManager = new ShadowManager(this);
+
+        // Add pause menu state
+        stateManager.attach(new PauseMenuState(this));
+
+        // Delete the default exit mapping
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        
+        // Add new exit mapping as key p
+        inputManager.addMapping("Exit", new KeyTrigger(KeyInput.KEY_P));
+        inputManager.addListener(new ActionListener() {
+            @Override
+            public void onAction(String name, boolean pressed, float tpf) {
+                if (name.equals("Exit") && !pressed) {
+                    stop();
+                }
+            }
+        }, "Exit");
     }
     
     @Override
