@@ -92,6 +92,10 @@ public class Main extends SimpleApplication {
         
         // Set up health bar with inital heath and max health
         healthBar = new HealthBar(this, maxHealth);
+        
+        // Initialize ShadowManager
+        ShadowManager shadowManager = new ShadowManager(this);
+        
     }
     
     @Override

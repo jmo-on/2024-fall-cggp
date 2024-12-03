@@ -8,6 +8,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.app.SimpleApplication;
 import com.jme3.texture.Texture;
 import com.jme3.asset.TextureKey;
+import com.jme3.renderer.queue.RenderQueue;
 
 /**
  * TargetFactory
@@ -47,6 +48,9 @@ public class TargetFactory {
         mat.setFloat("Shininess", 64f); // Controls the specular highlight
 
         target.setMaterial(mat);
+        
+        // set shadow mode
+        target.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
         // Add target control
         int initialHealth = 100; //can be changed later
