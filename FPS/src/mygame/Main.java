@@ -71,6 +71,9 @@ public class Main extends SimpleApplication {
         // Initialize lighting
         stateManager.attach(new LightingAppState());
 
+        // Initialize background music
+        stateManager.attach(new MusicAppState());
+
         // Load models
         //stateManager.attach(new ModelLoaderAppState());
 
