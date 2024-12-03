@@ -12,6 +12,10 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import com.jme3.scene.Geometry;
 import com.jme3.math.Vector3f;
+import java.util.Random;
+import mygame.core.EventListener;
+import mygame.core.EventBus;
+import mygame.GameEvent;
 
 /**
  * TargetAppState
@@ -21,6 +25,9 @@ public class TargetAppState extends AbstractAppState {
 
     private SimpleApplication app;
     private Node targetNode;
+    private final int TARGET_COUNT = 5; // Number of targets to maintain
+    private final float SPAWN_AREA = 20f; // Size of spawn area
+    private Random random = new Random();
 
     /**
      * Constructor
@@ -39,18 +46,47 @@ public class TargetAppState extends AbstractAppState {
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-
+        
         targetNode = new Node("Targets");
         this.app.getRootNode().attachChild(targetNode);
+        
+        // Subscribe to target destruction events
+        EventBus.getInstance().subscribe("TARGET_DESTROYED", new EventListener() {
+            @Override
+            public void onEvent(GameEvent event) {
+                // Check current target count
+                if (targetNode.getChildren().size() < TARGET_COUNT) {
+                    spawnNewTarget();
+                }
+            }
+        });
+        
+        // Initialize initial targets
+        for (int i = 0; i < TARGET_COUNT; i++) {
+            spawnNewTarget();
+        }
+    }
 
-        // Initialize targets
-        for (int i = 0; i < 5; i++) {
-            Node target = TargetFactory.makeTarget("Target" + i, new Vector3f(i * 3 - 6, 0, -10), this.app);
-            targetNode.attachChild(target);
-            
-            RigidBodyControl physicsControl = target.getControl(RigidBodyControl.class);
-            if (physicsControl != null) {
-                this.app.getStateManager().getState(BulletAppState.class).getPhysicsSpace().add(physicsControl);
+    private void spawnNewTarget() {
+        // Generate random position
+        float x = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
+        float z = (random.nextFloat() * 2 - 1) * SPAWN_AREA;
+        float y = 3f; // Fixed height for all targets
+        
+        Vector3f randomPosition = new Vector3f(x, y, z);
+        
+        // Create new target
+        Node target = TargetFactory.makeTarget("Target" + System.currentTimeMillis(), 
+                                             randomPosition, 
+                                             this.app);
+        targetNode.attachChild(target);
+        
+        // Add physics
+        RigidBodyControl physicsControl = target.getControl(RigidBodyControl.class);
+        if (physicsControl != null) {
+            BulletAppState bulletAppState = this.app.getStateManager().getState(BulletAppState.class);
+            if (bulletAppState != null) {
+                bulletAppState.getPhysicsSpace().add(physicsControl);
             }
         }
     }

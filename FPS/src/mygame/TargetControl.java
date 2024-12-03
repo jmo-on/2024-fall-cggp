@@ -6,19 +6,47 @@ import com.jme3.scene.control.AbstractControl;
 import mygame.core.EventListener;
 import mygame.core.EventBus;
 import mygame.GameEvent;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.math.Vector3f;
+import com.jme3.app.SimpleApplication;
+import com.jme3.scene.Spatial;
+import java.util.Random;
 
 public class TargetControl extends AbstractControl implements EventListener {
     private EventBus eventBus;
     private HealthBar healthBar;
     private final float maxHealth;
     private float health;
+    private SimpleApplication app;
+    private Vector3f moveDirection;
+    private float moveSpeed = 1f; // Slower speed
+    private float timeSinceDirectionChange = 0f;
+    private float directionChangeInterval = 3f;
+    private float initialY; // Store initial Y position
     
-    public TargetControl(int initialHealth) {
+    public TargetControl(SimpleApplication app, int initialHealth) {
+        this.app = app;
         this.health = initialHealth;
         this.maxHealth = initialHealth;
-        //this.healthBar = healthBar;
         this.eventBus = EventBus.getInstance();
         eventBus.subscribe("DAMAGE", this);
+        this.moveDirection = getRandomDirection();
+    }
+    
+    private Vector3f getRandomDirection() {
+        Random random = new Random();
+        float x = (random.nextFloat() * 2 - 1);
+        float z = (random.nextFloat() * 2 - 1);
+        return new Vector3f(x, 0, z).normalizeLocal();
+    }
+    
+    @Override
+    public void setSpatial(Spatial spatial) {
+        super.setSpatial(spatial);
+        if (spatial != null) {
+            initialY = spatial.getLocalTranslation().y; // Store initial Y position
+        }
     }
     
     @Override
@@ -43,9 +71,7 @@ public class TargetControl extends AbstractControl implements EventListener {
         }
         
         if (health <= 0) {
-            spatial.removeFromParent();
-            System.out.println("Target destroyed.");
-            //handleDeath();
+            handleDeath();
         }
         
         /*GameEvent damageEvent = new GameEvent("TARGET_DAMAGED");
@@ -61,14 +87,49 @@ public class TargetControl extends AbstractControl implements EventListener {
         deathEvent.addData("target", spatial);
         eventBus.publish(deathEvent);
         
+        // Remove from physics space if it has physics
+        RigidBodyControl physicsControl = spatial.getControl(RigidBodyControl.class);
+        if (physicsControl != null) {
+            app.getStateManager().getState(BulletAppState.class)
+                .getPhysicsSpace().remove(physicsControl);
+        }
+        
         spatial.removeFromParent();
     }
     
-    
-    
     @Override
     protected void controlUpdate(float tpf) {
-        // Update logic here
+        if (spatial != null) {
+            // Get current position
+            Vector3f currentPos = spatial.getLocalTranslation();
+            
+            // Calculate movement
+            Vector3f movement = moveDirection.mult(moveSpeed * tpf);
+            Vector3f newPos = currentPos.add(movement);
+            newPos.y = initialY;  // Keep Y position constant
+            
+            // Update position
+            spatial.setLocalTranslation(newPos);
+            
+            // Change direction periodically
+            timeSinceDirectionChange += tpf;
+            if (timeSinceDirectionChange >= directionChangeInterval) {
+                moveDirection = getRandomDirection();
+                timeSinceDirectionChange = 0;
+            }
+            
+            // Keep within bounds
+            float bound = 18f;
+            if (Math.abs(newPos.x) > bound || Math.abs(newPos.z) > bound) {
+                moveDirection = moveDirection.negate();
+            }
+            
+            // Update physics position
+            RigidBodyControl physicsControl = spatial.getControl(RigidBodyControl.class);
+            if (physicsControl != null) {
+                physicsControl.setPhysicsLocation(newPos);
+            }
+        }
     }
     
     @Override

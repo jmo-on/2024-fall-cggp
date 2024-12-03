@@ -11,6 +11,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 
 /**
  * TargetFactory
@@ -66,11 +67,13 @@ public class TargetFactory {
         targetNode.attachChild(healthBar);
         
         // Add target control
-        TargetControl targetControl = new TargetControl(100);
+        TargetControl targetControl = new TargetControl(app, 100);
         targetControl.setHealthBar(healthBar);
         targetNode.addControl(targetControl);
         
-        RigidBodyControl physicsControl = new RigidBodyControl(0.0f); // Static object
+        BoxCollisionShape collisionShape = new BoxCollisionShape(new Vector3f(0.5f, 0.5f, 0.5f));
+        RigidBodyControl physicsControl = new RigidBodyControl(collisionShape, 0.0f);
+        physicsControl.setKinematic(true);
         targetNode.addControl(physicsControl);
         System.out.println("TargetControl added to target: " + name);
 
