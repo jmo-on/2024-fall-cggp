@@ -94,13 +94,18 @@ public class Main extends SimpleApplication {
         // Set up health bar with inital heath and max health
         healthBar = new HealthBar(assetManager, maxHealth);
 
-        
+        // collision detection between bullet and target
         CollisionListener collisionListener = new CollisionListener();
         bulletAppState.getPhysicsSpace().addCollisionListener(collisionListener);
         
+        // Set up sky and fog (desert style) 
         SkyandFog fogManager = new SkyandFog(this);
-        fogManager.setupFog(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f), 5, 0.1f);
         fogManager.setupSky();
+        fogManager.setupFog(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f), 5, 0.1f);
+        
+        // Fog (forest style)
+        //SkyandFog fogManager = new SkyandFog(this);
+        //fogManager.setupFog(new ColorRGBA(0.6f, 0.8f, 0.7f, 1.0f), 60, 0.4f);
         
         // Initialize ShadowManager
         ShadowManager shadowManager = new ShadowManager(this);
