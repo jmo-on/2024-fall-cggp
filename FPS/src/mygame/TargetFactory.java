@@ -31,7 +31,7 @@ public class TargetFactory {
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
 
         // Load diffuse texture
-        TextureKey diffuseKey = new TextureKey("Textures/TargetTexture.png", false);
+        TextureKey diffuseKey = new TextureKey("Textures/targetMinecraft.png", false);
         Texture diffuseTex = app.getAssetManager().loadTexture(diffuseKey);
         mat.setTexture("DiffuseMap", diffuseTex);
 
