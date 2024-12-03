@@ -58,12 +58,12 @@ public class TargetFactory {
         // create target node to hold geometry and health bar
         Node targetNode = new Node(name);
         targetNode.setLocalTranslation(loc);
-        targetGeometry.setLocalTranslation(0, 0.5f, 0);
+        targetGeometry.setLocalTranslation(0, 0, 0);
         targetNode.attachChild(targetGeometry);
         
         // add health bar
         HealthBar healthBar = new HealthBar(app.getAssetManager(), 100);
-        healthBar.setLocalTranslation(0, 1.1f, 0);
+        healthBar.setLocalTranslation(0, 0.6f, 0);
         targetNode.attachChild(healthBar);
         
         // Add target control
