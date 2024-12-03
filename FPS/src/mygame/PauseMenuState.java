@@ -71,6 +71,13 @@ public class PauseMenuState extends AbstractAppState implements ActionListener {
         }
     }
 
+    public void updateMenuForGameEnd() {
+        if (menuItems != null && menuItems.length > 0) {
+            // Update the last menu item (Resume/Retry)
+            menuItems[menuItems.length - 1].setText("Retry");
+        }
+    }
+
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
         if (name.equals("Pause") && !isPressed) {
@@ -82,23 +89,38 @@ public class PauseMenuState extends AbstractAppState implements ActionListener {
 
     private void handleClick() {
         Vector2f click = app.getInputManager().getCursorPosition();
+        GUIAppState guiState = app.getStateManager().getState(GUIAppState.class);
+        boolean isGameComplete = guiState != null && guiState.isGameCompleted();
+
         for (int i = 0; i < menuItems.length; i++) {
             BitmapText item = menuItems[i];
             if (isClickOnText(click, item)) {
                 switch (i) {
                     case 0: // Easy Mode
                         setGameMode(GameMode.EASY);
+                        if (isGameComplete) {
+                            guiState.resetGame();
+                        }
                         togglePauseMenu();
                         break;
                     case 1: // Medium Mode
                         setGameMode(GameMode.MEDIUM);
+                        if (isGameComplete) {
+                            guiState.resetGame();
+                        }
                         togglePauseMenu();
                         break;
                     case 2: // Hard Mode
                         setGameMode(GameMode.HARD);
+                        if (isGameComplete) {
+                            guiState.resetGame();
+                        }
                         togglePauseMenu();
                         break;
-                    case 3: // Resume
+                    case 3: // Resume/Retry
+                        if (isGameComplete) {
+                            guiState.resetGame();
+                        }
                         togglePauseMenu();
                         break;
                 }
