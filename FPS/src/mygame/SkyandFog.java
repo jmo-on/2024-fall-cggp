@@ -41,17 +41,19 @@ public class SkyandFog {
     public void setupSky() {
     Spatial sky = SkyFactory.createSky(
         app.getAssetManager(),
-        app.getAssetManager().loadTexture("Textures/Sky/right.png"),
-        app.getAssetManager().loadTexture("Textures/Sky/left.png"),
-        app.getAssetManager().loadTexture("Textures/Sky/top.png"),
-        app.getAssetManager().loadTexture("Textures/Sky/bottom.png"),
-        app.getAssetManager().loadTexture("Textures/Sky/front.png"),
-        app.getAssetManager().loadTexture("Textures/Sky/back.png")
+        app.getAssetManager().loadTexture("Textures/ForestSky/px.jpg"),
+        app.getAssetManager().loadTexture("Textures/ForestSky/nx.jpg"),
+        app.getAssetManager().loadTexture("Textures/ForestSky/nz.jpg"),
+        app.getAssetManager().loadTexture("Textures/ForestSky/pz.jpg"),
+        app.getAssetManager().loadTexture("Textures/ForestSky/py.jpg"),
+        app.getAssetManager().loadTexture("Textures/ForestSky/ny.jpg")
     );
 
     sky.setQueueBucket(RenderQueue.Bucket.Sky);
     sky.setCullHint(Spatial.CullHint.Never);
-
+    
+    
+    //app.getRootNode().attachChild(SkyFactory.createSky(app.getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
     app.getRootNode().attachChild(sky);
 
     System.out.println("Sky cube map applied.");

@@ -106,7 +106,7 @@ public class Main extends SimpleApplication {
         
         // Set up sky and fog (desert style) 
         SkyandFog fogManager = new SkyandFog(this);
-        //fogManager.setupSky();
+        fogManager.setupSky();
         fogManager.setupFog(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f), 5, 0.1f);
         
         // Fog (forest style)
