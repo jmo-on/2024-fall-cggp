@@ -33,7 +33,7 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
         playerControl.setJumpSpeed(20);
         playerControl.setFallSpeed(30);
         playerControl.setGravity(30);
-        playerControl.setPhysicsLocation(new Vector3f(0, 1.8f, 0));
+        playerControl.setPhysicsLocation(new Vector3f(0, 3f, 0));  // Changed from 1.8f to 3f
         this.app.getStateManager().getState(BulletAppState.class)
                 .getPhysicsSpace().add(playerControl);
         setupKeys();
