@@ -123,9 +123,9 @@
            * ![image](https://github.com/user-attachments/assets/adf93f8e-837a-49d3-96b1-4bbcd3bb3138)
 
         * Implemented a comprehensive sound system:
-           * Background music with volume control
+           * Background music to add engrossment
            * Footstep sounds synchronized with player movement
-           * Weapon firing sound effects
+           * Weapon firing sound effect whenever bullet is shot
 
      * The code for these features is organized into separate AppStates for modularity:
         * SkyandFog class handles atmospheric effects
@@ -141,7 +141,7 @@
 * Kerry Wang
     * Textures, Lighting
     * SkyBox, Fog, Shadow, Particles
-    * Health Bar, Target Removal
+    * Health Bar, Target Removal, Collision Listener
 * Yongjae Lee
     * Collision Detection, Targets
     * Textures, Lighting
