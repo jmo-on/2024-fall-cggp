@@ -26,11 +26,11 @@ public class ShadowManager{
     public ShadowManager(SimpleApplication app) {
         // init light
         sun = new DirectionalLight();
-        sun.setDirection(new Vector3f(.3f, -0.5f, -0.5f));
+        sun.setDirection(new Vector3f(-1f, -1f, -1f).normalizeLocal()); // Adjust direction
         app.getRootNode().addLight(sun);
         
         // init shadow renderer
-        shadowRenderer = new DirectionalLightShadowRenderer(app.getAssetManager(), 1024, 2);
+        shadowRenderer = new DirectionalLightShadowRenderer(app.getAssetManager(), 2048, 4);
         shadowRenderer.setLight(sun);
         app.getViewPort().addProcessor(shadowRenderer);
         

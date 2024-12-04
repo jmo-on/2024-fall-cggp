@@ -13,6 +13,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.scene.Spatial;
 import java.util.Random;
 import com.jme3.math.Quaternion;
+import com.jme3.renderer.queue.RenderQueue;
 
 public class TargetControl extends AbstractControl implements EventListener {
     private EventBus eventBus;
@@ -47,6 +48,7 @@ public class TargetControl extends AbstractControl implements EventListener {
         super.setSpatial(spatial);
         if (spatial != null) {
             initialY = spatial.getLocalTranslation().y; // Store initial Y position
+            spatial.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);  
         }
     }
     

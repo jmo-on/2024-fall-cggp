@@ -1,10 +1,12 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.material.Material;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FogFilter;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
@@ -48,9 +50,13 @@ public class SkyandFog {
             app.getAssetManager().loadTexture("Textures/ForestSky/py.jpg"),
             app.getAssetManager().loadTexture("Textures/ForestSky/ny.jpg")
         );
+        Material skyMaterial = ((Geometry) sky).getMaterial();
+        skyMaterial.getAdditionalRenderState().setDepthWrite(false);
+
 
         sky.setQueueBucket(RenderQueue.Bucket.Sky);
         sky.setCullHint(Spatial.CullHint.Never);
+        sky.setShadowMode(RenderQueue.ShadowMode.Off);
     
         app.getRootNode().attachChild(sky);
     }

@@ -12,6 +12,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import com.jme3.scene.Geometry;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import java.util.Random;
 import mygame.core.EventListener;
 import mygame.core.EventBus;
@@ -120,10 +121,14 @@ public class TargetAppState extends AbstractAppState {
                 break;
         }
         
+      
         Vector3f position = new Vector3f(x, y, z);
         Node target = TargetFactory.makeTarget("Target" + System.currentTimeMillis(), 
                                              position, 
                                              this.app);
+        
+        // Set shadow mode for the target node and its children
+        target.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         
         // Set movement speed based on mode
         TargetControl targetControl = target.getControl(TargetControl.class);

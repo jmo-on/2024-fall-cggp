@@ -12,6 +12,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
+import com.jme3.renderer.queue.RenderQueue;
 
 /**
  * Main
@@ -105,16 +106,20 @@ public class Main extends SimpleApplication {
         bulletAppState.getPhysicsSpace().addCollisionListener(collisionListener);
         
         // Set up sky and fog (desert style) 
-        SkyandFog fogManager = new SkyandFog(this);
-        fogManager.setupSky();
+        //SkyandFog fogManager = new SkyandFog(this);
+        //fogManager.setupSky();
         //fogManager.setupFog(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f), 5, 0.1f);
         
         // Fog (forest style)
-        //SkyandFog fogManager = new SkyandFog(this);
-        fogManager.setupFog(new ColorRGBA(0.6f, 0.8f, 0.7f, 1.0f), 60, 0.4f);
+        SkyandFog skyandFog = new SkyandFog(this);
+        skyandFog.setupFog(new ColorRGBA(0.6f, 0.8f, 0.7f, 1.0f), 60, 0.4f);
+        skyandFog.setupSky();
         
         // Initialize ShadowManager
         ShadowManager shadowManager = new ShadowManager(this);
+        //shadowManager.enableShadows(RenderQueue.ShadowMode.CastAndReceive, targetNode);
+        //shadowManager.enableShadows(RenderQueue.ShadowMode.Receive, groundNode);
+        
 
         // Add pause menu state
         stateManager.attach(new PauseMenuState(this));
