@@ -91,8 +91,12 @@
      * Since the second deliverable, we have added several environmental and atmospheric effects to enhance the game's visual and audio experience:
         * We implemented a dynamic fog system with two styles:
            * Desert style: Light beige fog (ColorRGBA(0.9f, 0.9f, 0.9f)) with moderate density
+           * ![image](https://github.com/user-attachments/assets/099ca696-88da-41ff-97d7-f670fece647c)
+
            * Forest style: Greenish fog (ColorRGBA(0.6f, 0.8f, 0.7f)) with atmospheric depth
-           * ![image of fog effects]
+           * Forest Texture with and without Fog:
+           * ![image](https://github.com/user-attachments/assets/c2410f90-d1c6-4c09-a324-e1e3076b9b32)
+           * ![image](https://github.com/user-attachments/assets/432e2c72-eeab-4edb-8114-3100f7d6eda8)
 
         * Added a comprehensive shadow system:
            * DirectionalLightShadowRenderer for realistic shadow casting
@@ -136,7 +140,8 @@
 
 * Kerry Wang
     * Textures, Lighting
-    * Sky, Fog, Shadow, Particles
+    * SkyBox, Fog, Shadow, Particles
+    * Health Bar, Target Removal
 * Yongjae Lee
     * Collision Detection, Targets
     * Textures, Lighting
