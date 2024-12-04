@@ -124,6 +124,9 @@ public class Main extends SimpleApplication {
         // Add pause menu state
         stateManager.attach(new PauseMenuState(this));
 
+        // Add water
+        stateManager.attach(new WaterAppState());
+
         // Delete the default exit mapping
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         
