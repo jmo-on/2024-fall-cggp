@@ -1,7 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
+
 package mygame;
 
 import com.jme3.app.SimpleApplication;

@@ -1,3 +1,6 @@
+// Yongjae Lee
+// Jin Hong Moon
+// Kerry Wang
 package mygame;
 
 import com.jme3.anim.AnimComposer;
