@@ -102,7 +102,7 @@ public class Main extends SimpleApplication {
         healthBar = new HealthBar(assetManager, maxHealth);
 
         // collision detection between bullet and target
-        CollisionListener collisionListener = new CollisionListener();
+        CollisionListener collisionListener = new CollisionListener(this);
         bulletAppState.getPhysicsSpace().addCollisionListener(collisionListener);
         
         // Set up sky and fog (desert style) 
