@@ -104,7 +104,6 @@
            * Enhanced depth perception and realism
            * ![image](https://github.com/user-attachments/assets/596a20f6-4494-4d01-a7bd-d251a6d7badc)
 
-
         * Implemented dynamic skybox:
            * Forest-themed skybox using six-sided cube mapping
            * Desert-themed alternative skybox option
@@ -123,9 +122,22 @@
            * ![image](https://github.com/user-attachments/assets/adf93f8e-837a-49d3-96b1-4bbcd3bb3138)
 
         * Implemented a comprehensive sound system:
+        * 
            * Background music to add engrossment
            * Footstep sounds synchronized with player movement
            * Weapon firing sound effect whenever bullet is shot
+
+        * Controls to enhance gaming experience:
+           *  r to reload the gun
+           *  p to terminate
+           *  esc to pause the game and change modes
+         
+        * Other Additions:
+           * The game is complete when the player has successfully destroyed ten targets, indicated by a message prompt.
+           * ![image](https://github.com/user-attachments/assets/7284d563-e3ce-4288-9ebd-d7d3d1431c4c)
+           * Each target moves randomly to increase difficulty and interest
+              * Now have their own health bar with a regen rate so players shoot consecutively at one target to destroy them effectively
+              * ![image](https://github.com/user-attachments/assets/f6063bf3-1331-4262-b51c-9f9d266ae00b)
 
      * The code for these features is organized into separate AppStates for modularity:
         * SkyandFog class handles atmospheric effects
