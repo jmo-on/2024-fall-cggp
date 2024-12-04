@@ -16,6 +16,7 @@ import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.FastMath;
+import com.jme3.renderer.queue.RenderQueue;
 
 public class WaterAppState extends AbstractAppState {
     private SimpleApplication app;
@@ -71,15 +72,17 @@ public class WaterAppState extends AbstractAppState {
 
     private void createReflectionScene() {
         // Load skybox texture
-        Texture west = app.getAssetManager().loadTexture("Textures/ForestSky/px.jpg");
+        /*Texture west = app.getAssetManager().loadTexture("Textures/ForestSky/px.jpg");
         Texture east = app.getAssetManager().loadTexture("Textures/ForestSky/nx.jpg");
         Texture north = app.getAssetManager().loadTexture("Textures/ForestSky/nz.jpg");
         Texture south = app.getAssetManager().loadTexture("Textures/ForestSky/pz.jpg");
         Texture up = app.getAssetManager().loadTexture("Textures/ForestSky/py.jpg");
         Texture down = app.getAssetManager().loadTexture("Textures/ForestSky/ny.jpg");
 
-        app.getRootNode().attachChild(SkyFactory.createSky(app.getAssetManager(), west, east, north, south, up, down));
+        //.setShadowMode(RenderQueue.ShadowMode.Off);
         
+        app.getRootNode().attachChild(SkyFactory.createSky(app.getAssetManager(), west, east, north, south, up, down));
+        */
         // Add light for better water appearance
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.5f, -0.5f, -0.5f).normalizeLocal());
