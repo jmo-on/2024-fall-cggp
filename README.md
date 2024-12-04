@@ -102,25 +102,25 @@
            * DirectionalLightShadowRenderer for realistic shadow casting
            * Configurable shadow modes for different objects (CastAndReceive, Receive)
            * Enhanced depth perception and realism
-           * ![image of shadow effects]
+           * ![image](https://github.com/user-attachments/assets/596a20f6-4494-4d01-a7bd-d251a6d7badc)
+
 
         * Implemented dynamic skybox:
            * Forest-themed skybox using six-sided cube mapping
            * Desert-themed alternative skybox option
-           * Seamless integration with fog effects
-           * ![image of sky system]
+           * Seamless integration with fog effects (see fog section)
 
         * Created procedural terrain:
            * HillHeightMap-based terrain generation
            * Grass texture mapping with proper scaling
            * Physics-enabled terrain collision
-           * ![image of terrain]
+           * ![image](https://github.com/user-attachments/assets/6f47e3a8-a0fc-45b2-b060-a8dbc71fe434)
 
         * Added realistic water effects:
            * Reflective water surface
            * Water physics and visual effects
            * Integration with lighting system
-           * ![image of water effects]
+           * ![image](https://github.com/user-attachments/assets/adf93f8e-837a-49d3-96b1-4bbcd3bb3138)
 
         * Implemented a comprehensive sound system:
            * Background music with volume control
