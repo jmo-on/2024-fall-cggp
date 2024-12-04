@@ -108,6 +108,9 @@
            * Forest-themed skybox using six-sided cube mapping
            * Desert-themed alternative skybox option
            * Seamless integration with fog effects (see fog section)
+        
+        * Included Particles (burst) when the bullet successfully shoots the target
+           * ![image](https://github.com/user-attachments/assets/fef09e68-582e-42ee-9c00-af32ef7025e0)
 
         * Created procedural terrain:
            * HillHeightMap-based terrain generation
