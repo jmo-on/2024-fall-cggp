@@ -87,9 +87,60 @@
         * ![image](https://github.com/user-attachments/assets/de8c837c-f1ff-40e3-8638-80fd91991556)
      * Finally, we retained features like jumping, gravity, and collision mechanics to allow the player to navigate the game effectively.
 
-       
- 
+   * Third Deliverable
+     * Since the second deliverable, we have added several environmental and atmospheric effects to enhance the game's visual and audio experience:
+        * We implemented a dynamic fog system with two styles:
+           * Desert style: Light beige fog (ColorRGBA(0.9f, 0.9f, 0.9f)) with moderate density
+           * Forest style: Greenish fog (ColorRGBA(0.6f, 0.8f, 0.7f)) with atmospheric depth
+           * ![image of fog effects]
 
-   
+        * Added a comprehensive shadow system:
+           * DirectionalLightShadowRenderer for realistic shadow casting
+           * Configurable shadow modes for different objects (CastAndReceive, Receive)
+           * Enhanced depth perception and realism
+           * ![image of shadow effects]
 
-    
+        * Implemented dynamic skybox:
+           * Forest-themed skybox using six-sided cube mapping
+           * Desert-themed alternative skybox option
+           * Seamless integration with fog effects
+           * ![image of sky system]
+
+        * Created procedural terrain:
+           * HillHeightMap-based terrain generation
+           * Grass texture mapping with proper scaling
+           * Physics-enabled terrain collision
+           * ![image of terrain]
+
+        * Added realistic water effects:
+           * Reflective water surface
+           * Water physics and visual effects
+           * Integration with lighting system
+           * ![image of water effects]
+
+        * Implemented a comprehensive sound system:
+           * Background music with volume control
+           * Footstep sounds synchronized with player movement
+           * Weapon firing sound effects
+
+     * The code for these features is organized into separate AppStates for modularity:
+        * SkyandFog class handles atmospheric effects
+        * ShadowManager manages shadow rendering
+        * SceneAppState controls terrain generation
+        * WaterAppState manages water effects
+        * MusicAppState handles all audio features
+
+     * All these features work together to create an immersive gaming environment while maintaining performance through efficient resource management and state control.
+
+## Member Contributions
+
+* Kerry Wang
+    * Textures, Lighting
+    * Sky, Fog, Shadow, Particles
+* Yongjae Lee
+    * Collision Detection, Targets
+    * Textures, Lighting
+    * Terrain, Water, Sound
+* Jin Hong Moon
+    * Textures, Lighting
+    * Sound, Reload, GUI, Game modes
