@@ -102,30 +102,45 @@
            * DirectionalLightShadowRenderer for realistic shadow casting
            * Configurable shadow modes for different objects (CastAndReceive, Receive)
            * Enhanced depth perception and realism
-           * ![image of shadow effects]
+           * ![image](https://github.com/user-attachments/assets/596a20f6-4494-4d01-a7bd-d251a6d7badc)
 
         * Implemented dynamic skybox:
            * Forest-themed skybox using six-sided cube mapping
            * Desert-themed alternative skybox option
-           * Seamless integration with fog effects
-           * ![image of sky system]
+           * Seamless integration with fog effects (see fog section)
+        
+        * Included Particles (burst) when the bullet successfully shoots the target
+           * ![image](https://github.com/user-attachments/assets/fef09e68-582e-42ee-9c00-af32ef7025e0)
 
         * Created procedural terrain:
            * HillHeightMap-based terrain generation
            * Grass texture mapping with proper scaling
            * Physics-enabled terrain collision
-           * ![image of terrain]
+           * ![image](https://github.com/user-attachments/assets/6f47e3a8-a0fc-45b2-b060-a8dbc71fe434)
 
         * Added realistic water effects:
            * Reflective water surface
            * Water physics and visual effects
            * Integration with lighting system
-           * ![image of water effects]
+           * ![image](https://github.com/user-attachments/assets/adf93f8e-837a-49d3-96b1-4bbcd3bb3138)
 
         * Implemented a comprehensive sound system:
-           * Background music with volume control
+        * 
+           * Background music to add engrossment
            * Footstep sounds synchronized with player movement
-           * Weapon firing sound effects
+           * Weapon firing sound effect whenever bullet is shot
+
+        * Controls to enhance gaming experience:
+           *  r to reload the gun
+           *  p to terminate
+           *  esc to pause the game and change modes
+         
+        * Other Additions:
+           * The game is complete when the player has successfully destroyed ten targets, indicated by a message prompt.
+           * ![image](https://github.com/user-attachments/assets/7284d563-e3ce-4288-9ebd-d7d3d1431c4c)
+           * Each target moves randomly to increase difficulty and interest
+              * Now have their own health bar with a regen rate so players shoot consecutively at one target to destroy them effectively
+              * ![image](https://github.com/user-attachments/assets/f6063bf3-1331-4262-b51c-9f9d266ae00b)
 
      * The code for these features is organized into separate AppStates for modularity:
         * SkyandFog class handles atmospheric effects
@@ -141,7 +156,7 @@
 * Kerry Wang
     * Textures, Lighting
     * SkyBox, Fog, Shadow, Particles
-    * Health Bar, Target Removal
+    * Health Bar, Target Removal, Collision Listener
 * Yongjae Lee
     * Collision Detection, Targets
     * Textures, Lighting
@@ -149,3 +164,5 @@
 * Jin Hong Moon
     * Textures, Lighting
     * Sound, Reload, GUI, Game modes
+ 
+Due to scheduling constraints, we worked independently on different features of the game, with each team member focusing on specific aspects to enhance the overall experience. We coordinated by sharing our intended tasks, exchanging ideas, and occasionally working simultaneously while maintaining clear communication to avoid conflicts or unintended code modifications. Additionally, we ensured that our individual contributions and design decisions were reviewed and confirmed with other group members to keep everyone aligned and effectively contribute to the project.
