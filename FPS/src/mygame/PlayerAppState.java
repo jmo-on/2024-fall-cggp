@@ -20,6 +20,9 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
     private CharacterControl playerControl;
     private Vector3f walkDirection = new Vector3f();
     private boolean left, right, forward, backward;
+    private MusicAppState musicAppState;
+    private float footstepTimer = 0;
+    private static final float FOOTSTEP_INTERVAL = 0.4f; // Adjust this for footstep frequency
 
     public PlayerAppState(SimpleApplication app) {
         this.app = app;
@@ -28,6 +31,7 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
     @Override
     public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        this.musicAppState = stateManager.getState(MusicAppState.class);
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.5f, 1.8f, 1);
         playerControl = new CharacterControl(capsuleShape, 0.05f);
         playerControl.setJumpSpeed(20);
@@ -59,6 +63,23 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
         if (backward) walkDirection.addLocal(camDir.negate());
         playerControl.setWalkDirection(walkDirection);
         app.getCamera().setLocation(playerControl.getPhysicsLocation());
+
+        // Handle footstep sounds
+        if ((left || right || forward || backward) && playerControl.onGround()) {
+            footstepTimer += tpf;
+            if (footstepTimer >= FOOTSTEP_INTERVAL) {
+                if (musicAppState != null) {
+                    musicAppState.playFootstep();
+                }
+                footstepTimer = 0;
+            }
+        } else {
+            // Stop footsteps when not moving or in air
+            if (musicAppState != null) {
+                musicAppState.stopFootstep();
+            }
+            footstepTimer = FOOTSTEP_INTERVAL; // Reset timer
+        }
     }
 
     @Override

@@ -11,12 +11,16 @@ public class MusicAppState extends AbstractAppState {
     private SimpleApplication app;
     private AudioNode backgroundMusic;
     private float musicVolume = 0.5f; // Adjustable volume level
+    private AudioNode footstepSound;
+    private boolean isFootstepPlaying = false;
+    private float footstepVolume = 0.3f;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (SimpleApplication) app;
         setupBackgroundMusic();
+        setupSoundEffects();
     }
 
     private void setupBackgroundMusic() {
@@ -32,6 +36,19 @@ public class MusicAppState extends AbstractAppState {
             backgroundMusic.play();
         } catch (Exception e) {
             System.err.println("Error loading background music: " + e.getMessage());
+        }
+    }
+
+    private void setupSoundEffects() {
+        try {
+            // Create audio node for footsteps
+            footstepSound = new AudioNode(app.getAssetManager(), "Sounds/footstep.wav", DataType.Buffer);
+            footstepSound.setPositional(false);
+            footstepSound.setLooping(false);
+            footstepSound.setVolume(footstepVolume);
+            app.getRootNode().attachChild(footstepSound);
+        } catch (Exception e) {
+            System.err.println("Error loading sound effects: " + e.getMessage());
         }
     }
 
@@ -55,11 +72,38 @@ public class MusicAppState extends AbstractAppState {
         }
     }
 
+    public void playFootstep() {
+        if (footstepSound != null && !isFootstepPlaying) {
+            footstepSound.playInstance();
+            isFootstepPlaying = true;
+            // Reset flag after a short delay
+            new Thread(() -> {
+                try {
+                    Thread.sleep(400); // 0.4 seconds
+                    isFootstepPlaying = false;
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
+        }
+    }
+
+    public void stopFootstep() {
+        if (footstepSound != null) {
+            footstepSound.stop();
+            isFootstepPlaying = false;
+        }
+    }
+
     @Override
     public void cleanup() {
         if (backgroundMusic != null) {
             backgroundMusic.stop();
             app.getRootNode().detachChild(backgroundMusic);
+        }
+        if (footstepSound != null) {
+            footstepSound.stop();
+            app.getRootNode().detachChild(footstepSound);
         }
         super.cleanup();
     }
