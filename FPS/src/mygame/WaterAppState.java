@@ -70,7 +70,7 @@ public class WaterAppState extends AbstractAppState {
     }
 
     private void createReflectionScene() {
-        // Load skybox texture
+        /*// Load skybox texture
         Texture west = app.getAssetManager().loadTexture("Textures/DesertSky/front.png");
         Texture east = app.getAssetManager().loadTexture("Textures/DesertSky/right.png");
         Texture up = app.getAssetManager().loadTexture("Textures/DesertSky/top.png");
@@ -79,7 +79,7 @@ public class WaterAppState extends AbstractAppState {
         Texture south = app.getAssetManager().loadTexture("Textures/DesertSky/back.png");
 
         app.getRootNode().attachChild(SkyFactory.createSky(app.getAssetManager(), west, east, north, south, up, down));
-        
+        */
         // Add light for better water appearance
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.5f, -0.5f, -0.5f).normalizeLocal());
