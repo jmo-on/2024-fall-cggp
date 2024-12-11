@@ -32,7 +32,9 @@ public class GUIAppState extends AbstractAppState {
 
         // Create score text
         hudText = new BitmapText(guiFont, false);
-        hudText.setSize(guiFont.getCharSet().getRenderedSize());
+        hudText.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ColorRGBA forestGreen = new ColorRGBA(0.02f, 0.2f, 0.02f, 1f);
+        hudText.setColor(forestGreen);
         hudText.setText("Targets Destroyed: 0 / " + WIN_SCORE);
         hudText.setLocalTranslation(10, this.app.getCamera().getHeight() - 10, 0);
 
