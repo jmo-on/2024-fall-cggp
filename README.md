@@ -164,6 +164,10 @@
            * Player death triggers game over state
            * Option to restart or quit
            * Final score display
+
+## Demo
+[![Watch the video]([https://raw.githubusercontent.com](https://youtu.be/OY2_iY-WiGY)/iKerryWang/2024-fall-cggp/main/assets/thumbnail.jpg)](https://raw.githubusercontent.com/iKerryWang/2024-fall-cggp/main/assets/video.mp4)
+
   
 ## Member Contributions
 
