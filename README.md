@@ -151,9 +151,9 @@
 
      * All these features work together to create an immersive gaming environment while maintaining performance through efficient resource management and state control.
 
-    * Fourth Deliverable
-        * Added targets that shoot bullets at the player:
-           * Targets now fire projectiles at regular intervals
+   * Fourth Deliverable
+     * Added targets that shoot bullets at the player:
+        * Targets now fire projectiles at regular intervals
            * Bullets deal damage to player on hit
            * Visual and sound effects for target shooting
         * Refined shadows and models:
@@ -180,3 +180,28 @@
     * Sound, Reload, GUI, Game modes
  
 Due to scheduling constraints, we worked independently on different features of the game, with each team member focusing on specific aspects to enhance the overall experience. We coordinated by sharing our intended tasks, exchanging ideas, and occasionally working simultaneously while maintaining clear communication to avoid conflicts or unintended code modifications. Additionally, we ensured that our individual contributions and design decisions were reviewed and confirmed with other group members to keep everyone aligned and effectively contribute to the project.
+
+## Demo
+
+https://drive.google.com/file/d/1_xlWrpqBdoaeAy8HtMMNGsHZVLTGgtA-/view?usp=sharing
+
+## Download
+
+https://drive.google.com/file/d/1aAl5XqDqKJLC-95YHAQSmce4i7_tC5XH/view?usp=sharing
+
+## Future Development
+
+  * Multiple weapon types with different characteristics
+  * Power-ups and special abilities
+  * More varied target behaviors and movement patterns
+  * Additional game modes (survival, time trial, etc.)
+  * Difficulty settings and progression system
+  * More diverse environments and terrain types
+  * Enhanced particle effects for impacts and explosions
+  * More detailed models and textures
+  * Advanced lighting effects
+  * Multiplayer functionality
+  * Save/load game state
+  * Performance optimizations
+  * Configurable controls and settings
+  * Tutorial system

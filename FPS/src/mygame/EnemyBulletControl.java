@@ -27,6 +27,7 @@ public class EnemyBulletControl extends AbstractControl {
             spatial.addControl(bulletPhys);
             bulletAppState.getPhysicsSpace().add(bulletPhys);
             bulletPhys.setLinearVelocity(initialVelocity);
+            bulletPhys.setGravity(Vector3f.ZERO);
         } else {
             // Clean up physics when spatial is removed
             if (bulletPhys != null) {

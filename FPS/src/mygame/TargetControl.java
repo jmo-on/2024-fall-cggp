@@ -36,7 +36,10 @@ public class TargetControl extends AbstractControl implements EventListener {
     private float directionChangeInterval = 3f;
     private float initialY; // Store initial Y position
     private float shootTimer = 0f;
-    private float shootInterval = 1.5f; // Shoot more frequently
+    private final float EASY_SHOOT_INTERVAL = 2.0f;    // Slower shooting in easy mode
+    private final float MEDIUM_SHOOT_INTERVAL = 1.5f;  // Current medium speed
+    private final float HARD_SHOOT_INTERVAL = 0.2f;    // Much faster shooting in hard mode
+    private float shootInterval = MEDIUM_SHOOT_INTERVAL;
     private static final float BULLET_SPEED = 20f; // Faster bullets
     private static final float MAX_BULLET_DISTANCE = 50f; // Maximum distance before cleanup
     private float gameStartDelay = 5f;
@@ -216,6 +219,14 @@ public class TargetControl extends AbstractControl implements EventListener {
     
     public void setMoveSpeed(float speed) {
         this.moveSpeed = speed;
+        // Set shooting interval based on speed/mode
+        if (speed == 0) {  // EASY mode
+            this.shootInterval = EASY_SHOOT_INTERVAL;
+        } else if (speed >= 4f) {  // HARD mode
+            this.shootInterval = HARD_SHOOT_INTERVAL;
+        } else {  // MEDIUM mode
+            this.shootInterval = MEDIUM_SHOOT_INTERVAL;
+        }
     }
 
     private void shootAtPlayer() {
