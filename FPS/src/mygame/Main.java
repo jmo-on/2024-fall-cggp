@@ -13,6 +13,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Spatial;
 
 /**
  * Main

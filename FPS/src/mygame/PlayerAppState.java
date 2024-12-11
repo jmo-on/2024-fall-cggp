@@ -2,12 +2,14 @@ package mygame;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.input.controls.*;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 
 public class PlayerAppState extends AbstractAppState implements ActionListener {
     private SimpleApplication app;
@@ -26,17 +28,31 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
     }
 
     @Override
-    public void initialize(com.jme3.app.state.AppStateManager stateManager, Application app) {
+    public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        this.app = (SimpleApplication) app;
         this.musicAppState = stateManager.getState(MusicAppState.class);
+        
+        // Create player physics
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.5f, 1.8f, 1);
         playerControl = new CharacterControl(capsuleShape, 0.05f);
+        
+        // Create a Node for the player and set its name
+        Node playerNode = new Node("Player");
+        playerNode.addControl(playerControl);
+        
         playerControl.setJumpSpeed(20);
         playerControl.setFallSpeed(30);
         playerControl.setGravity(30);
         playerControl.setPhysicsLocation(new Vector3f(0, 3f, 0));
-        this.app.getStateManager().getState(BulletAppState.class)
-                .getPhysicsSpace().add(playerControl);
+        
+        // Add to physics space
+        BulletAppState bulletAppState = this.app.getStateManager().getState(BulletAppState.class);
+        bulletAppState.getPhysicsSpace().add(playerControl);
+        
+        // Add to scene
+        this.app.getRootNode().attachChild(playerNode);
+        
         setupKeys();
     }
 

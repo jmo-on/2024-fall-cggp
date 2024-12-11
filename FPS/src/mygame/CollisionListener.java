@@ -9,6 +9,10 @@ import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.scene.Spatial;
 import com.jme3.effect.ParticleEmitter;
+import mygame.core.EventBus;
+import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.BulletAppState;
 
 /**
  *
@@ -24,9 +28,52 @@ public class CollisionListener implements PhysicsCollisionListener {
     @Override
     public void collision(PhysicsCollisionEvent event) {
         if (event.getNodeA() != null && event.getNodeB() != null) {
-            System.out.println("Collision detected:");
-            System.out.println("NodeA: " + event.getNodeA().getName());
-            System.out.println("NodeB: " + event.getNodeB().getName());
+            String nodeAName = event.getNodeA().getName();
+            String nodeBName = event.getNodeB().getName();
+            
+            System.out.println("Collision detected between:");
+            System.out.println("NodeA: " + nodeAName + " (Type: " + event.getObjectA().getClass().getName() + ")");
+            System.out.println("NodeB: " + nodeBName + " (Type: " + event.getObjectB().getClass().getName() + ")");
+
+            // Remove enemy bullets when they hit terrain
+            if ((nodeAName != null && nodeAName.equals("EnemyBullet") && nodeBName != null && nodeBName.equals("terrain")) ||
+                (nodeBName != null && nodeBName.equals("EnemyBullet") && nodeAName != null && nodeAName.equals("terrain"))) {
+                
+                // Get the bullet node
+                Spatial bullet = nodeAName.equals("EnemyBullet") ? event.getNodeA() : event.getNodeB();
+                
+                // Clean up physics before removing
+                RigidBodyControl bulletPhys = bullet.getControl(RigidBodyControl.class);
+                if (bulletPhys != null) {
+                    app.getStateManager().getState(BulletAppState.class).getPhysicsSpace().remove(bulletPhys);
+                }
+                bullet.removeFromParent();
+            }
+
+            // Check for enemy bullet hitting player
+            if ((nodeAName != null && nodeAName.equals("EnemyBullet") && 
+                event.getObjectB() instanceof CharacterControl) ||
+                (nodeBName != null && nodeBName.equals("EnemyBullet") && 
+                event.getObjectA() instanceof CharacterControl)) {
+                
+                System.out.println("Enemy bullet hit player!");
+                
+                // Remove the bullet
+                Spatial bullet = nodeAName != null && nodeAName.equals("EnemyBullet") ? 
+                            event.getNodeA() : event.getNodeB();
+                            
+                // Clean up physics before removing
+                RigidBodyControl bulletPhys = bullet.getControl(RigidBodyControl.class);
+                if (bulletPhys != null) {
+                    app.getStateManager().getState(BulletAppState.class).getPhysicsSpace().remove(bulletPhys);
+                }
+                bullet.removeFromParent();
+
+                // Trigger player damage event
+                GameEvent damageEvent = new GameEvent("PLAYER_DAMAGED");
+                EventBus.getInstance().publish(damageEvent);
+                System.out.println("Player hit! Damage event published.");
+            }
 
             if ((event.getNodeA().getName().equals("Bullet") && event.getNodeB().getName().startsWith("Target")) ||
             (event.getNodeB().getName().equals("Bullet") && event.getNodeA().getName().startsWith("Target"))) {
@@ -72,6 +119,24 @@ public class CollisionListener implements PhysicsCollisionListener {
                 } else if (event.getNodeB().getName().equals("Bullet")) {
                     event.getNodeB().removeFromParent();
                 }
+            }
+
+            // Check for enemy bullet hitting player
+            boolean isEnemyBulletA = event.getNodeA() != null && event.getNodeA().getName().equals("EnemyBullet");
+            boolean isEnemyBulletB = event.getNodeB() != null && event.getNodeB().getName().equals("EnemyBullet");
+            boolean isPlayerA = event.getObjectA() != null && event.getObjectA().getClass().getName().contains("CharacterControl");
+            boolean isPlayerB = event.getObjectB() != null && event.getObjectB().getClass().getName().contains("CharacterControl");
+
+            if ((isEnemyBulletA && isPlayerB) || (isEnemyBulletB && isPlayerA)) {
+                System.out.println("Enemy bullet hit player!");
+                // Remove the bullet
+                Spatial bullet = isEnemyBulletA ? event.getNodeA() : event.getNodeB();
+                bullet.removeFromParent();
+
+                // Trigger player damage event
+                GameEvent damageEvent = new GameEvent("PLAYER_DAMAGED");
+                EventBus.getInstance().publish(damageEvent);
+                System.out.println("Player hit! Damage event published.");
             }
         } else {
             //System.err.println("Collision event has a null node: NodeA=" + event.getNodeA() + ", NodeB=" + event.getNodeB());

@@ -154,4 +154,8 @@ public class TargetAppState extends AbstractAppState {
             bulletAppState.getPhysicsSpace().add(physicsControl);
         }
     }
+
+    public Node getTargetNode() {
+        return targetNode;
+    }
 }

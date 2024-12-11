@@ -18,6 +18,11 @@ import com.jme3.scene.Spatial;
 import java.util.Random;
 import com.jme3.math.Quaternion;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Sphere;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.audio.AudioNode;
 
 public class TargetControl extends AbstractControl implements EventListener {
     private EventBus eventBus;
@@ -30,6 +35,13 @@ public class TargetControl extends AbstractControl implements EventListener {
     private float timeSinceDirectionChange = 0f;
     private float directionChangeInterval = 3f;
     private float initialY; // Store initial Y position
+    private float shootTimer = 0f;
+    private float shootInterval = 1.5f; // Shoot more frequently
+    private static final float BULLET_SPEED = 20f; // Faster bullets
+    private static final float MAX_BULLET_DISTANCE = 50f; // Maximum distance before cleanup
+    private float gameStartDelay = 5f;
+    private boolean canShoot = false;
+    private AudioNode shootSound;
     
     public TargetControl(SimpleApplication app, int initialHealth) {
         this.app = app;
@@ -38,6 +50,13 @@ public class TargetControl extends AbstractControl implements EventListener {
         this.eventBus = EventBus.getInstance();
         eventBus.subscribe("DAMAGE", this);
         this.moveDirection = getRandomDirection();
+        
+        // Initialize shooting sound
+        shootSound = new AudioNode(app.getAssetManager(), "Sounds/laser_gunshot.wav", false);
+        shootSound.setPositional(true);
+        shootSound.setLooping(false);
+        shootSound.setVolume(0.5f);
+        app.getRootNode().attachChild(shootSound);
     }
     
     private Vector3f getRandomDirection() {
@@ -109,39 +128,62 @@ public class TargetControl extends AbstractControl implements EventListener {
     @Override
     protected void controlUpdate(float tpf) {
         if (spatial != null) {
-        // Get current position
-        Vector3f currentPos = spatial.getLocalTranslation();
+            // Update game start delay
+            if (!canShoot) {
+                gameStartDelay -= tpf;
+                if (gameStartDelay <= 0) {
+                    canShoot = true;
+                    System.out.println("Target can now shoot!");
+                }
+            }
 
-        // Calculate movement along all axes
-        Vector3f movement = moveDirection.mult(moveSpeed * tpf);
-        Vector3f newPos = currentPos.add(movement);
+            // Only shoot if delay has passed
+            if (canShoot) {
+                Vector3f playerPos = app.getCamera().getLocation();
+                float distanceToPlayer = spatial.getWorldTranslation().distance(playerPos);
+                
+                if (distanceToPlayer < MAX_BULLET_DISTANCE) {
+                    shootTimer += tpf;
+                    if (shootTimer >= shootInterval) {
+                        shootAtPlayer();
+                        shootTimer = 0;
+                    }
+                }
+            }
 
-        // Keep targets within bounds
-        float bound = 18f;  // Scene boundary
-        newPos.x = Math.max(-bound, Math.min(bound, newPos.x));
-        newPos.z = Math.max(-bound, Math.min(bound, newPos.z));
-        
-        // Allow vertical movement only in HARD mode
-        if (moveSpeed >= 4f) {  // Only in HARD mode
-            newPos.y = Math.max(1f, Math.min(6f, newPos.y));  // Height range
-        } else {
-            newPos.y = initialY;  // Keep constant in other modes
-        }
+            // Get current position
+            Vector3f currentPos = spatial.getLocalTranslation();
 
-        // Update spatial position
-        spatial.setLocalTranslation(newPos);
+            // Calculate movement along all axes
+            Vector3f movement = moveDirection.mult(moveSpeed * tpf);
+            Vector3f newPos = currentPos.add(movement);
 
-        // Change direction periodically
-        timeSinceDirectionChange += tpf;
-        if (timeSinceDirectionChange >= directionChangeInterval) {
-            moveDirection = getRandomDirection();
-            timeSinceDirectionChange = 0;
-        }
+            // Keep targets within bounds
+            float bound = 18f;  // Scene boundary
+            newPos.x = Math.max(-bound, Math.min(bound, newPos.x));
+            newPos.z = Math.max(-bound, Math.min(bound, newPos.z));
+            
+            // Allow vertical movement only in HARD mode
+            if (moveSpeed >= 4f) {  // Only in HARD mode
+                newPos.y = Math.max(1f, Math.min(6f, newPos.y));  // Height range
+            } else {
+                newPos.y = initialY;  // Keep constant in other modes
+            }
 
-        // Bounce back if hitting the boundaries
-        if (Math.abs(newPos.x) > bound || Math.abs(newPos.z) > bound || newPos.y <= 1f || newPos.y >= 6f) {
-            moveDirection = moveDirection.negate();
-        }
+            // Update spatial position
+            spatial.setLocalTranslation(newPos);
+
+            // Change direction periodically
+            timeSinceDirectionChange += tpf;
+            if (timeSinceDirectionChange >= directionChangeInterval) {
+                moveDirection = getRandomDirection();
+                timeSinceDirectionChange = 0;
+            }
+
+            // Bounce back if hitting the boundaries
+            if (Math.abs(newPos.x) > bound || Math.abs(newPos.z) > bound || newPos.y <= 1f || newPos.y >= 6f) {
+                moveDirection = moveDirection.negate();
+            }
             
             // Make health bar face the camera (only in X-Z plane)
             if (healthBar != null) {
@@ -174,5 +216,41 @@ public class TargetControl extends AbstractControl implements EventListener {
     
     public void setMoveSpeed(float speed) {
         this.moveSpeed = speed;
+    }
+
+    private void shootAtPlayer() {
+        // Create bullet
+        Sphere sphere = new Sphere(8, 8, 0.2f);
+        Geometry bullet = new Geometry("EnemyBullet", sphere);
+        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Red);
+        bullet.setMaterial(mat);
+
+        // Position bullet and sound at target location
+        Vector3f spawnPos = spatial.getWorldTranslation().clone();
+        bullet.setLocalTranslation(spawnPos);
+        shootSound.setLocalTranslation(spawnPos);
+
+        // Play shooting sound
+        shootSound.playInstance();
+
+        // Calculate direction to player
+        Vector3f playerPos = app.getCamera().getLocation();
+        Vector3f direction = playerPos.subtract(spawnPos).normalizeLocal();
+
+        // Add bullet control with the calculated direction
+        bullet.addControl(new EnemyBulletControl(app, direction, BULLET_SPEED));
+        app.getRootNode().attachChild(bullet);
+    }
+
+    public void resetShootingDelay() {
+        gameStartDelay = 5f;
+        canShoot = false;
+    }
+
+    public void cleanup() {
+        if (shootSound != null) {
+            shootSound.removeFromParent();
+        }
     }
 }
