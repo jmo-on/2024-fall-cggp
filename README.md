@@ -164,6 +164,10 @@
            * Player death triggers game over state
            * Option to restart or quit
            * Final score display
+        * Future works:
+           * Online multiplayer
+           * More weapons
+           * More maps
   
 ## Member Contributions
 
