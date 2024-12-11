@@ -1,9 +1,4 @@
-// Yongjae Lee
-// Jin Hong Moon
-// Kerry Wang
-
 package mygame;
-
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -14,19 +9,17 @@ import com.jme3.input.controls.*;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Vector3f;
 
-/**
- * PlayerAppState
- * Player control for the game
- */
 public class PlayerAppState extends AbstractAppState implements ActionListener {
-
     private SimpleApplication app;
     private CharacterControl playerControl;
     private Vector3f walkDirection = new Vector3f();
-    private boolean left, right, forward, backward;
+    private boolean left, right, forward, backward, isRunning;
     private MusicAppState musicAppState;
     private float footstepTimer = 0;
-    private static final float FOOTSTEP_INTERVAL = 0.4f; // Adjust this for footstep frequency
+    private static final float FOOTSTEP_INTERVAL = 0.4f;
+    private static final float RUNNING_FOOTSTEP_INTERVAL = 0.25f; // Faster footsteps while running
+    private static final float WALK_SPEED = 0.1f;
+    private static final float RUN_SPEED = 0.2f; // Twice as fast when running
 
     public PlayerAppState(SimpleApplication app) {
         this.app = app;
@@ -53,36 +46,42 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
         app.getInputManager().addMapping("Forward", new KeyTrigger(KeyInput.KEY_W));
         app.getInputManager().addMapping("Backward", new KeyTrigger(KeyInput.KEY_S));
         app.getInputManager().addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-        app.getInputManager().addListener(this, "Left", "Right", "Forward", "Backward", "Jump");
+        app.getInputManager().addMapping("Run", new KeyTrigger(KeyInput.KEY_LSHIFT)); // Add run mapping
+
+        app.getInputManager().addListener(this, "Left", "Right", "Forward", "Backward", "Jump", "Run");
     }
 
     @Override
     public void update(float tpf) {
-        Vector3f camDir = app.getCamera().getDirection().clone().multLocal(0.1f);
-        Vector3f camLeft = app.getCamera().getLeft().clone().multLocal(0.05f);
+        float currentSpeed = isRunning ? RUN_SPEED : WALK_SPEED;
+        float currentFootstepInterval = isRunning ? RUNNING_FOOTSTEP_INTERVAL : FOOTSTEP_INTERVAL;
+
+        Vector3f camDir = app.getCamera().getDirection().clone().multLocal(currentSpeed);
+        Vector3f camLeft = app.getCamera().getLeft().clone().multLocal(currentSpeed / 2); // Keep side movement slower
+
         walkDirection.set(0, 0, 0);
         if (left) walkDirection.addLocal(camLeft);
         if (right) walkDirection.addLocal(camLeft.negate());
         if (forward) walkDirection.addLocal(camDir);
         if (backward) walkDirection.addLocal(camDir.negate());
+
         playerControl.setWalkDirection(walkDirection);
         app.getCamera().setLocation(playerControl.getPhysicsLocation());
 
-        // Handle footstep sounds
+        // Handle footstep sounds with adjusted interval for running
         if ((left || right || forward || backward) && playerControl.onGround()) {
             footstepTimer += tpf;
-            if (footstepTimer >= FOOTSTEP_INTERVAL) {
+            if (footstepTimer >= currentFootstepInterval) {
                 if (musicAppState != null) {
                     musicAppState.playFootstep();
                 }
                 footstepTimer = 0;
             }
         } else {
-            // Stop footsteps when not moving or in air
             if (musicAppState != null) {
                 musicAppState.stopFootstep();
             }
-            footstepTimer = FOOTSTEP_INTERVAL; // Reset timer
+            footstepTimer = currentFootstepInterval;
         }
     }
 
@@ -94,6 +93,7 @@ public class PlayerAppState extends AbstractAppState implements ActionListener {
             case "Forward": forward = isPressed; break;
             case "Backward": backward = isPressed; break;
             case "Jump": if (isPressed) playerControl.jump(); break;
+            case "Run": isRunning = isPressed; break;
         }
     }
 }
