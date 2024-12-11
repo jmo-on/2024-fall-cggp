@@ -17,6 +17,7 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
     private SimpleApplication app;
     private GunAppState gunAppState;
     private Node guiNode;
+    private MusicAppState musicAppState;
     
     // Ammo and reload parameters
     private int currentAmmo = 30;
@@ -50,6 +51,9 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
         if (gunAppState == null) {
             System.out.println("GunAppState not found!");
         }
+
+        // Initialize music state
+        musicAppState = stateManager.getState(MusicAppState.class);
         
         // Setup UI elements
         setupReloadUI();
@@ -124,6 +128,8 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
                 shoot();
                 currentAmmo--;
                 updateAmmoText();
+            } else if (musicAppState != null) {
+                musicAppState.playEmptyGun();
             }
         } else if (binding.equals("Reload") && !isPressed && !isReloading && currentAmmo < maxAmmo) {
             startReload();
@@ -136,20 +142,34 @@ public class ShootAppState extends AbstractAppState implements ActionListener {
         reloadBarBackground.setCullHint(Geometry.CullHint.Never);
         reloadBar.setCullHint(Geometry.CullHint.Never);
         reloadBar.setLocalScale(0, 1, 1);
+        if (musicAppState != null) {
+            musicAppState.playReload();
+        }
     }
 
     private void shoot() {
+        // Create bullet geometry
         Sphere sphere = new Sphere(8, 8, 0.1f);
         Geometry bullet = new Geometry("Bullet", sphere);
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Yellow);
         bullet.setMaterial(mat);
+        
+        // Set bullet position
         bullet.setLocalTranslation(app.getCamera().getLocation().add(app.getCamera().getDirection().mult(1)));
+        
+        // Add BulletControl
         bullet.addControl(new BulletControl(app, app.getCamera().getDirection()));
         app.getRootNode().attachChild(bullet);
         
+        // Play gun animation
         if (gunAppState != null) {
             gunAppState.playShootAnimation();
+        }
+
+        // Play shoot sound
+        if (musicAppState != null) {
+            musicAppState.playGunshot();
         }
     }
 }
