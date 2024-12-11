@@ -52,7 +52,7 @@ public class GUIAppState extends AbstractAppState {
         gameCompleteText = new BitmapText(guiFont, false);
         gameCompleteText.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         gameCompleteText.setText("Game Complete!");
-        gameCompleteText.setColor(ColorRGBA.Yellow);
+        gameCompleteText.setColor(forestGreen);
         gameCompleteText.setLocalTranslation(
             (this.app.getCamera().getWidth() - gameCompleteText.getLineWidth()) / 2,
             this.app.getCamera().getHeight() / 2,
@@ -117,6 +117,7 @@ public class GUIAppState extends AbstractAppState {
         app.getStateManager().getState(TargetAppState.class).setEnabled(false);
         
         // Show game over text
+        gameCompleteText.setColor(ColorRGBA.Red);
         gameCompleteText.setText("Game Over!");
         gameCompleteText.setCullHint(Spatial.CullHint.Never);
         
