@@ -168,9 +168,6 @@
            * Online multiplayer
            * More weapons
            * More maps
-
-## Demo
-[![FPS]([https://www.youtube.com/watch?v=VIDEO_ID](https://youtu.be/iYRS-HmSSZU))
   
 ## Member Contributions
 
