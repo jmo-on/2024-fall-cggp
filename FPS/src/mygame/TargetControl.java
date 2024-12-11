@@ -43,9 +43,11 @@ public class TargetControl extends AbstractControl implements EventListener {
     private Vector3f getRandomDirection() {
         Random random = new Random();
         float x = (random.nextFloat() * 2 - 1);
+        float y = (random.nextFloat() * 2 - 1);
         float z = (random.nextFloat() * 2 - 1);
-        return new Vector3f(x, 0, z).normalizeLocal();
+        return new Vector3f(x, y, z).normalizeLocal();
     }
+    
     
     @Override
     public void setSpatial(Spatial spatial) {
@@ -107,35 +109,39 @@ public class TargetControl extends AbstractControl implements EventListener {
     @Override
     protected void controlUpdate(float tpf) {
         if (spatial != null) {
-            // Get current position
-            Vector3f currentPos = spatial.getLocalTranslation();
-            
-            // Calculate movement
-            Vector3f movement = moveDirection.mult(moveSpeed * tpf);
-            Vector3f newPos = currentPos.add(movement);
-            newPos.y = initialY;  // Keep Y position constant
-            
-            // Update position
-            spatial.setLocalTranslation(newPos);
-            
-            // Change direction periodically
-            timeSinceDirectionChange += tpf;
-            if (timeSinceDirectionChange >= directionChangeInterval) {
-                moveDirection = getRandomDirection();
-                timeSinceDirectionChange = 0;
-            }
-            
-            // Keep within bounds
-            float bound = 18f;
-            if (Math.abs(newPos.x) > bound || Math.abs(newPos.z) > bound) {
-                moveDirection = moveDirection.negate();
-            }
-            
-            // Update physics position
-            RigidBodyControl physicsControl = spatial.getControl(RigidBodyControl.class);
-            if (physicsControl != null) {
-                physicsControl.setPhysicsLocation(newPos);
-            }
+        // Get current position
+        Vector3f currentPos = spatial.getLocalTranslation();
+
+        // Calculate movement along all axes
+        Vector3f movement = moveDirection.mult(moveSpeed * tpf);
+        Vector3f newPos = currentPos.add(movement);
+
+        // Keep targets within bounds
+        float bound = 18f;  // Scene boundary
+        newPos.x = Math.max(-bound, Math.min(bound, newPos.x));
+        newPos.z = Math.max(-bound, Math.min(bound, newPos.z));
+        
+        // Allow vertical movement only in HARD mode
+        if (moveSpeed >= 4f) {  // Only in HARD mode
+            newPos.y = Math.max(1f, Math.min(6f, newPos.y));  // Height range
+        } else {
+            newPos.y = initialY;  // Keep constant in other modes
+        }
+
+        // Update spatial position
+        spatial.setLocalTranslation(newPos);
+
+        // Change direction periodically
+        timeSinceDirectionChange += tpf;
+        if (timeSinceDirectionChange >= directionChangeInterval) {
+            moveDirection = getRandomDirection();
+            timeSinceDirectionChange = 0;
+        }
+
+        // Bounce back if hitting the boundaries
+        if (Math.abs(newPos.x) > bound || Math.abs(newPos.z) > bound || newPos.y <= 1f || newPos.y >= 6f) {
+            moveDirection = moveDirection.negate();
+        }
             
             // Make health bar face the camera (only in X-Z plane)
             if (healthBar != null) {
