@@ -151,6 +151,20 @@
 
      * All these features work together to create an immersive gaming environment while maintaining performance through efficient resource management and state control.
 
+    * Fourth Deliverable
+        * Added targets that shoot bullets at the player:
+           * Targets now fire projectiles at regular intervals
+           * Bullets deal damage to player on hit
+           * Visual and sound effects for target shooting
+        * Refined shadows and models:
+           * Enhanced shadow quality and performance
+           * Improved target and weapon models
+           * Better visual feedback
+        * Added game over functionality:
+           * Player death triggers game over state
+           * Option to restart or quit
+           * Final score display
+  
 ## Member Contributions
 
 * Kerry Wang
