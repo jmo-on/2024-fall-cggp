@@ -116,7 +116,7 @@ public class Main extends SimpleApplication {
         skyandFog.setupSky();
         
         // Initialize ShadowManager
-        ShadowManager shadowManager = new ShadowManager(this);
+        //ShadowManager shadowManager = new ShadowManager(this);
         //shadowManager.enableShadows(RenderQueue.ShadowMode.CastAndReceive, targetNode);
         //shadowManager.enableShadows(RenderQueue.ShadowMode.Receive, groundNode);
         
